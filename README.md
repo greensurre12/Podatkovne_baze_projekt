@@ -2,4 +2,4 @@
 Pri predmetu Osnove podatkovnih baz 2016/2017 bova naredila protip oglasne deske za ponujanje prevozov.
 
 ER diagram:
-![Alt text](/path/to/er.png?raw=true "Optional Title")
+![ScreenShot](https://raw.github.com/nocmatic/Oglasna_deska_projekt/er.png)
