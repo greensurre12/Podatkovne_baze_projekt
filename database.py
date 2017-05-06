@@ -1,1 +1,1 @@
-#dodaj bazo sem , proba github
+#dodaj bazo sem -- kot imaš na mailu
