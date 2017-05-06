@@ -1,1 +1,1 @@
-aaaa
+#dodaj bazo sem
