@@ -87,3 +87,5 @@ ENV/
 
 # Rope project settings
 .ropeproject
+#podatki do baze so zasciteni
+auth_public.py
