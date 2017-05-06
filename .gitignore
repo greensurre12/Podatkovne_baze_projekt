@@ -89,3 +89,5 @@ ENV/
 .ropeproject
 #podatki do baze so zasciteni
 auth_public.py
+.pydevproject
+.project
