@@ -63,7 +63,7 @@ def signup():
         
     else:
         geslo = password_md5(geslo) #zakodira geslo za shranjevanje
-        cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon) VALUES (DEFAULT, '{0}', '{1}', '{2}')".format(uporabnisko_ime, geslo, telefon))
+        cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon) VALUES (DEFAULT, %s, %s, %s)", (uporabnisko_ime, geslo, telefon))
             
         bottle.response.set_cookie("account", uporabnisko_ime, secret=secret) #cookie 
         return template("glavna_stran.html", uporabnik = uporabnisko_ime) #na glavno stran
