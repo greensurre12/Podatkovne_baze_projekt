@@ -91,6 +91,12 @@ def login():
     
 ########################################################################################     
 
+@bottle.get('/logout')
+def logout():
+    """Pobriši cookie in preusmeri na login."""
+    bottle.response.delete_cookie('account')
+    return template("prva_stran.html")
+
 
 
 run()
