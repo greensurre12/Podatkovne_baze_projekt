@@ -27,7 +27,7 @@ def password_md5(s):
 
 ######################################################################
 
-@route("/", method="GET")
+@route("/")
 def prva_stran():
     return template("prva_stran.html")
     
@@ -65,9 +65,32 @@ def signup():
         geslo = password_md5(geslo) #zakodira geslo za shranjevanje
         cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon) VALUES (DEFAULT, '{0}', '{1}', '{2}')".format(uporabnisko_ime, geslo, telefon))
             
-        bottle.response.set_cookie("account", uporabnisko_ime, secret=secret) 
-        return template("prva_stran.html") #na prvo stran
+        bottle.response.set_cookie("account", uporabnisko_ime, secret=secret) #cookie 
+        return template("glavna_stran.html", uporabnik = uporabnisko_ime) #na glavno stran
 
 ########################################################################################        
+
+@route('/login')
+def login():
+    """Prikaze template za vpis"""
+    return template ("login.html", napaka = False)
+
+@route('/login', method="POST")
+def login():
+    
+    uporabnisko_ime = bottle.request.forms.uporabnisko_ime 
+    geslo = password_md5(bottle.request.forms.geslo)
+    cur.execute("SELECT 1 FROM uporabnik WHERE username=%s AND geslo=%s",[uporabnisko_ime, geslo])
+
+    if cur.rowcount == 0: #ce SELECT ne najde nicesar -> ta kombinacija (username, password) ne obstaja
+        return bottle.template("login.html", napaka="Napacno uporabnisko ime ali geslo!")
+
+    else:
+        bottle.response.set_cookie('account', uporabnisko_ime, secret=secret)
+        return template("glavna_stran.html", uporabnik = uporabnisko_ime)
+    
+########################################################################################     
+
+
 
 run()

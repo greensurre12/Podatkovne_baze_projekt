@@ -1,0 +1,14 @@
+<p>Vpiši se!<p>
+%if napaka:
+<p>{{napaka}}<p>
+%end
+<form action="/login" method="POST">
+	<input type ="text" size="20" placeholder="uporabnisko_ime" maxlenght="50" name="uporabnisko_ime"/>
+
+	<input type ="text" placeholder="geslo" size="20" maxlenght="50" name="geslo"/>
+
+ 	<input type="submit" name="potrdi" value="registriraj se"/>
+</form>
+
+<form action="/" method="GET">
+	<input type="submit" name="back" value="nazaj">
