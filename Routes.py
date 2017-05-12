@@ -55,7 +55,7 @@ def signup():
         return bottle.template("signup.html", napaka="Telefon je obvezen!")
         
     else:
-        geslo = password_md5(geslo) #zakodira geslo za shranjevanje
+        geslo = funkcije.password_md5(geslo) #zakodira geslo za shranjevanje
         cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon) VALUES (DEFAULT, %s, %s, %s)", (uporabnisko_ime, geslo, telefon))
             
         bottle.response.set_cookie("account", uporabnisko_ime, secret=secret) #cookie 
@@ -72,7 +72,7 @@ def login():
 def login():
     
     uporabnisko_ime = bottle.request.forms.uporabnisko_ime 
-    geslo = password_md5(bottle.request.forms.geslo)
+    geslo = funkcije.password_md5(bottle.request.forms.geslo)
     cur.execute("SELECT 1 FROM uporabnik WHERE username=%s AND geslo=%s",[uporabnisko_ime, geslo])
 
     if cur.rowcount == 0: #ce SELECT ne najde nicesar -> ta kombinacija (username, password) ne obstaja
