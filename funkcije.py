@@ -1,6 +1,14 @@
 
 
 import hashlib # računanje MD5 kriptografski hash za gesla
+import bottle
+from bottle import *
+import hashlib # računanje MD5 kriptografski hash za gesla
+import auth_public as auth
+import psycopg2, psycopg2.extensions, psycopg2.extras
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
+import funkcije 
+import sqlite3
 '''tukaj pišiva funkcije, ki jih uporabljava'''
 
 #############################################################################

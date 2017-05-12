@@ -59,7 +59,7 @@ def signup():
         cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon) VALUES (DEFAULT, %s, %s, %s)", (uporabnisko_ime, geslo, telefon))
             
         bottle.response.set_cookie("account", uporabnisko_ime, secret=secret) #cookie 
-        return template("glavna_stran.html", uporabnik = uporabnisko_ime) #na glavno stran
+        return template("glavna_stran.html", uporabnik = uporabnisko_ime, napaka=False) #na glavno stran
 
 ########################################################################################        
 
@@ -80,7 +80,7 @@ def login():
 
     else:
         bottle.response.set_cookie('account', uporabnisko_ime, secret=secret)
-        return template("glavna_stran.html", uporabnik = uporabnisko_ime)
+        return template("glavna_stran.html", uporabnik = uporabnisko_ime, napaka=False)
 
 ########################################################################################     
 
