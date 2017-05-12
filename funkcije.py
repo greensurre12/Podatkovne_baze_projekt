@@ -1,6 +1,6 @@
 
 
-
+import hashlib # računanje MD5 kriptografski hash za gesla
 '''tukaj pišiva funkcije, ki jih uporabljava'''
 
 #############################################################################
