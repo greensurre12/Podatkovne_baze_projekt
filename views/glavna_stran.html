@@ -1,11 +1,14 @@
 <p>Pozdravljen!<p>
 <p>Prijavljen si z uporabniskim imenom {{uporabnik}}.<p>
+%if napaka:
+<p style="color:red;">{{napaka}}<p>
+%end
 
-<form action="/" method="GET">
-	<input type="submit" name="back" value="placeholder: objavi prevoz">
+<form action="/objavi/{{uporabnik}}" method="GET">
+	<input type="submit" name="back" value="objavi prevoz">
 </form>
 <form action="/" method="GET">
-	<input type="submit" name="back" value="placeholder: poisci prevoz">
+	<input type="submit" name="back" value="poisci prevoz">
 </form>
 <form action="/logout" method="GET">
 	<input type="submit" name="back" value="log out">
