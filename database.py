@@ -1,1 +1,0 @@
-#dodaj bazo sem -- kot imaš na mailu
