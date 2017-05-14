@@ -1,6 +1,3 @@
-
-
-import hashlib # računanje MD5 kriptografski hash za gesla
 import bottle
 from bottle import *
 import hashlib # računanje MD5 kriptografski hash za gesla

@@ -1,7 +1,4 @@
-
-  
-
-<h1>Objavi prevoz!</h1>
+﻿<h1>Objavi prevoz!</h1>
 %if napaka:
 <p style="color:red;">{{napaka}}<p>
 %end
@@ -14,11 +11,11 @@
     <input type ="text" size="20" maxlenght="50" name="koncni_kraj" id = "txt_2" onkeyup='saveValue(this);'/>
     <br>
     Zacetek:
-    <input type ="datetime-local"  name="zacetek"/ id = "txt_3" onkeyup='saveValue(this);'> 
+    <input type ="datetime-local" min="{{zdaj}}" name="zacetek"/ id = "txt_3" onkeyup='saveValue(this);'> 
     
     <br>
     Konec:
-    <input type ="datetime-local"  name="konec" id = "txt_4" onkeyup='saveValue(this);'/> 
+    <input type ="datetime-local" min="{{zdaj}}" name="konec" id = "txt_4" onkeyup='saveValue(this);'/> 
     
     <br>
     
@@ -38,7 +35,7 @@
 </form>
 
 
-<form action="/login" method="GET">
+<form action="/{{uporabnik}}" method="GET">
     <input type="submit" name="back" value="nazaj">
     
  

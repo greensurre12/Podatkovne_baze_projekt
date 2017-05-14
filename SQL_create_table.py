@@ -13,7 +13,7 @@ CREATE TABLE kraj (
     
 CREATE TABLE prevoz (
     id SERIAL PRIMARY KEY,
-    objavil INTEGER """FOREIGN KEY TO DA ERROR; ZAKAJ?""" REFERENCES uporabnik(id),
+    objavil TEXT """FOREIGN KEY TO DA ERROR; ZAKAJ?""" REFERENCES uporabnik(username),
     ON DELETE CASCADE, --ce se uporabnik zbrise, se tudi njegov prevoz zbrise   
     zacetek TIMESTAMP NOT NULL, 
     zacetni_kraj TEXT REFERENCES kraj(ime) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE prevoz (
 
     
 CREATE TABLE narocanje (
-    narocnik INTEGER REFERENCES uporabnik(id),
+    narocnik TEXT REFERENCES uporabnik(username),
     prevoz INTEGER REFERENCES prevoz(id),
     mesta INTEGER,  
     
