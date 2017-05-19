@@ -2,7 +2,7 @@
 %if napaka:
 <p style="color:red;">{{napaka}}<p>
 %end
-<form action="/objavi/{{uporabnik}}" method="POST">
+<form action="/{{uporabnik}}/objavi" method="POST">
     <!--DODAJ JAVASCRIPT FUNKCIJO TAKOJŠNI PREGLED ALI KRAJ OBSTAJA OZ. JE PRAVILNO ZAPISAN-->
     Zacetni Kraj:
     <input type ="text" size="20" maxlenght="50" name="zacetni_kraj" id="txt_1" onkeyup='saveValue(this);'/>

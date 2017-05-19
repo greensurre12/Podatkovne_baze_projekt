@@ -4,10 +4,10 @@
 <p style="color:red;">{{napaka}}<p>
 %end
 
-<form action="/objavi/{{uporabnik}}" method="GET">
+<form action="/{{uporabnik}}/objavi" method="GET">
 	<input type="submit" name="back" value="objavi prevoz">
 </form>
-<form action="/"method="GET">
+<form action="/{{uporabnik}}/isci"method="GET">
 	<input type="submit" name="back" value="poisci prevoz">
 </form>
 <form action="/logout" method="GET">
