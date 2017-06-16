@@ -9,6 +9,8 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 from funkcije import * 
 import sqlite3
 from datetime import datetime
+from bottle import get, static_file
+
 ######################################################################
 
 conn = psycopg2.connect(database=auth.db, host=auth.host, user=auth.user, password=auth.password) #
@@ -16,6 +18,18 @@ conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)        
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)                                      #
 
 secret = "to je signature key za cookije, zato naj bo nek nakjlučni niz aosfh1309uhn0f1j1f9hj"
+#####################################################################################
+
+static_dir = "./static"
+# Static Routes
+"Da lahko bere css in javascript datoteke iz mape static"
+@route("/static/<filename:path>")
+def static(filename):
+    """Splošna funkcija, ki servira vse statične datoteke iz naslova
+       /static/..."""
+    return bottle.static_file(filename, root=static_dir)
+
+
 ######################################################################
 """PREBERI TO
 -cookies: cookie ima ime account, v njem je shranjeno uporabnisko ime, hashano ker ga lahko kdorkoli bere
@@ -23,6 +37,10 @@ secret = "to je signature key za cookije, zato naj bo nek nakjlučni niz aosfh13
  poslat na drugo stran, uporabis redirect. Argumente v redirect shranis v url, ki ga posljes ali pa v cookie.
 -ZDI SE MI da je treba ob vsaki novi preusmeritvi cookie preveriti
 """
+
+
+
+
 
 
 ######################################################################
@@ -33,10 +51,11 @@ def prva_stran():
     cookie = str(request.get_cookie('account', secret=secret))
     cur.execute("SELECT 1 FROM uporabnik WHERE username=%s", [cookie])    
 
-    if cur.rowcount == 0:        
-        return template("prva_stran.html", napaka=False) #ce ze ma cookie ga avtomatsko logira
-    else:
-        return redirect('/{0}'.format(cookie))
+    #if cur.rowcount == 0:        
+    return bottle.template("index.html", napaka=False) 
+    #ce ze ma cookie ga avtomatsko logira
+    #else:
+        #return redirect('/{0}'.format(cookie))
 
 ######################################################################
 """GLAVNA STRAN"""
@@ -45,17 +64,17 @@ def prva_stran():
 def glavna_stran(uporabnik):
     cookie = request.get_cookie('account', secret=secret)
     if str(cookie) == uporabnik:
-        return template("glavna_stran.html", napaka=False, uporabnik=uporabnik)
+        return bottle.template("uporabnik.html", napaka=False, uporabnik=uporabnik,zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
     else:
         return redirect("/")
 
 ######################################################################
-"""SIGNUP"""
+"""SIGNUP je kar na isti strani kot index.html"""
 
-@route('/signup', method = "GET")       #prvi @route prikaze template, drugi pobere podatke ki jih uporabnik vpise
-def signup():
-    """Prikaze template na strani"""
-    return template("signup.html", napaka=False)
+#@route('/signup', method = "GET")       #prvi @route prikaze template, drugi pobere podatke ki jih uporabnik vpise
+#def signup():
+   #"""Prikaze template na strani"""
+    #return template("signup.html", napaka=False)
 
 @route('/signup', method= "POST")
 def signup():
@@ -65,34 +84,30 @@ def signup():
     geslo = bottle.request.forms.geslo
     potrdi_geslo = bottle.request.forms.potrdi_geslo
     telefon = bottle.request.forms.telefon
+    email= bottle.request.forms.email
     cur.execute("SELECT 1 FROM uporabnik WHERE username=%s", [uporabnisko_ime])
 
     if cur.rowcount != 0: #ce SELECT najde nekaj -> ta username ze obstaja
-        return bottle.template("signup.html", napaka="To uporabnisko ime že obstaja!")
+        return bottle.template("index.html", napaka="To uporabnisko ime že obstaja!")
             
     elif geslo != potrdi_geslo:
-        return bottle.template("signup.html", napaka="Gesli se ne ujemata!")
+        return bottle.template("index.html", napaka="Gesli se ne ujemata!")
 
     elif len(geslo)<4: #Neke omejitve glede na geslo, ime, telefon. Lahko poljubno spreminjas.
-        return bottle.template("signup.html", napaka="Geslo naj ima vsaj 4 znake!")
+        return bottle.template("index.html", napaka="Geslo naj ima vsaj 4 znake!")
     elif len(uporabnisko_ime)<4:
-        return bottle.template("signup.html", napaka="Uporabnisko ime naj ima vsaj 4 znake!")
+        return bottle.template("index.html", napaka="Uporabnisko ime naj ima vsaj 4 znake!")
     elif len(telefon)==0:
-        return bottle.template("signup.html", napaka="Telefon je obvezen!")
+        return bottle.template("index.html", napaka="Telefon je obvezen!")
         
     else:
         geslo = funkcije.password_md5(geslo) #zakodira geslo za shranjevanje
-        cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon) VALUES (DEFAULT, %s, %s, %s)", (uporabnisko_ime, geslo, telefon))
+        cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon,email) VALUES (DEFAULT, %s, %s, %s,%s)", (uporabnisko_ime, geslo, telefon,email))
         bottle.response.set_cookie("account", value=uporabnisko_ime, secret=secret, path='/') #cookie 
-        return redirect('/glavna/{0}'.format(uporabnisko_ime)) #na glavno stran
+        return redirect('/{0}'.format(uporabnisko_ime)) #na glavno stran
 
 ########################################################################################        
 """LOGIN"""
-
-@route('/login', method ="GET")
-def login():
-    """Prikaze template za vpis"""
-    return template ("login.html", napaka = False)
 
 @route('/login', method="POST")
 def login():
@@ -102,7 +117,7 @@ def login():
     cur.execute("SELECT 1 FROM uporabnik WHERE username=%s AND geslo=%s",[uporabnisko_ime, geslo])
 
     if cur.rowcount == 0: #ce SELECT ne najde nicesar -> ta kombinacija (username, password) ne obstaja
-        return bottle.template("login.html", napaka="Napacno uporabnisko ime ali geslo!")
+        return bottle.template("index.html", napaka="Napacno uporabnisko ime ali geslo!")
 
     else: #uspesen login
         bottle.response.set_cookie('account', value=uporabnisko_ime, secret=secret, path='/')
@@ -161,12 +176,8 @@ def objavi_post(uporabnik):
 """SEARCH"""
 @route('/<uporabnik>/isci')
 def isci(uporabnik):
-    uporabnik = request.get_cookie('account', secret=secret)
-    if uporabnik == None
-        return redirect("/")
     
-    else:
-        return template("iskanje.html")
+        return template("iskanje.html",uporabnik1=uporabnik)
     
 
 run()

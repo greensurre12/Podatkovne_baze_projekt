@@ -4,7 +4,8 @@ CREATE TABLE uporabnik (
     id SERIAL PRIMARY KEY,
     username TEXT NOT NULL UNIQUE, 
     geslo TEXT NOT NULL,
-    telefon TEXT 
+    telefon TEXT,
+    email TEXT NOT NULL,
     );
 
 CREATE TABLE kraj (

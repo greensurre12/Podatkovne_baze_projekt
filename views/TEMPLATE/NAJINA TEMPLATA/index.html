@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+              <!-- Basic Page Needs
+        ================================================== -->
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="icon" type="image/png" href="images/favicon.png">
+        <title>Prevoznik</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="">
+        <!-- Mobile Specific Metas
+        ================================================== -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Template CSS Files
+        ================================================== -->
+        <!-- Twitter Bootstrs CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!-- Ionicons Fonts Css -->
+        <link rel="stylesheet" href="css/ionicons.min.css">
+        <!-- animate css -->
+        <link rel="stylesheet" href="css/animate.css">
+        <!-- Hero area slider css-->
+        <link rel="stylesheet" href="css/slider.css">
+        <!-- owl craousel css -->
+        <link rel="stylesheet" href="css/owl.carousel.css">
+        <link rel="stylesheet" href="css/owl.theme.css">
+        <link rel="stylesheet" href="css/jquery.fancybox.css">
+        <!-- template main css file -->
+        <link rel="stylesheet" href="css/main.css">
+        <!-- responsive css -->
+        <link rel="stylesheet" href="css/responsive.css">
+        
+        <!-- Template Javascript Files
+        ================================================== -->
+        <!-- modernizr js -->
+       
+        
+        
+  
+        
+        
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <!-- jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- owl carouserl js -->
+        <script src="js/owl.carousel.min.js"></script>
+        <!-- bootstrap js -->
+
+        <script src="js/bootstrap.min.js"></script>
+        <!-- wow js -->
+        <script src="js/wow.min.js"></script>
+        <!-- slider js -->
+        <script src="js/slider.js"></script>
+        <script src="js/jquery.fancybox.js"></script>
+        <!-- template main js -->
+        <script src="js/main.js"></script>
+    
+        <!-- ----------------------------------------------------------------7
+        ZGORAJ SO TEMPLATI V css/main.css DODAJAŠ LASTNI STIL NPR. KAKO IZGLEDA GUMB, BACKGROUND ITD
+        -->
+   
+      </head>
+      <body>
+        <!--
+        ==================================================
+        HEADER
+        ================================================== -->
+        <header id="top-bar" class="navbar-fixed-top animate-header">
+            <div class="container">
+                <div class="navbar-header"> <!--TO JE NAVIGACIJSKI HEADER- KOT V WORDU headerfooter-->
+                    <span class="icon-bar"></span>
+                    </button>
+                    
+                    
+                    <!-- logo -->
+                    <div class="navbar-brand bot">
+                        <a href="index.html" >
+                            <img src="images/logo1a.png" alt="">
+                        </a>
+                    </div>
+                    <!-- /logo -->
+                </div>
+                <!-- GLAVNI MENI  -->
+                <nav class="collapse navbar-collapse navbar-right" role="navigation">
+                    <div class="main-menu">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="index.html" >Home</a>
+                            </li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="service.html">Service</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages <span class="caret"></span></a>
+                                <div class="dropdown-menu">
+                                    <ul>
+                                        <li><a href="404.html">404 Page</a></li>
+                                        <li><a href="gallery.html">Gallery</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <span class="caret"></span></a>
+                                <div class="dropdown-menu">
+                                    <ul>
+                                        <li><a href="blog-fullwidth.html">Blog Full</a></li>
+                                        <li><a href="blog-left-sidebar.html">Blog Left sidebar</a></li>
+                                        <li><a href="blog-right-sidebar.html">Blog Right sidebar</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                </nav>
+                <!-- /main nav -->
+            </div>
+        </header>
+        
+        <!--
+        ==================================================
+        TO JE GLAVNO OKNO S ISKALNIKOM IN LOGINOM
+        ================================================== -->
+        
+        
+        <section id="hero-area" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="block wow fadeInUp" data-wow-delay=".1s">
+                            
+                            <!-- ce napises class = "wow fadeInUp animated" je to animacija ki potegne navzgor (glej spletno)-->
+                            
+                                <h1 class="wow fadeInUp animated cd-headline slide" data-wow-delay=".2s" >
+                                <span>Prevoznik.si</span><br>
+                                </h1>
+                                <h2 class="wow fadeInUp animated" data-wow-delay=".1s" >
+                                    Poišči prevoz!
+                                    
+                                <!-- TU JE OSNOVNI ISKALNIK PREVOZOV - le malo lepša forma  -->
+                                <form class="form-inline" action="/isci" method="post">
+                                    <div class="form-group">
+                                        <label for="od_kraj">Od:</label>
+                                        <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhodni">
+                                   </div>
+                                    <div class="form-group">
+                                        <label for="do_kraj">Do:</label>
+                                        <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="dohodni">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-default">Isci!</button>
+                                </form>
+                                </h2>
+                                <h2 class="wow fadeInUp animated" data-wow-delay=".1s" >
+                                
+                                    Za objavo prevoza se vpiši ali registriraj!
+                                </h2>                         
+        <!--V vsak class dodajaš tudi kaksno lasnost, npr zelis premaknen gumb za par pikslov (npr hotu sm da je odmaknjena
+        forma za 20px od napisa "Za objavo prevoza se vpisi ali registriraj"..)
+        Tako sem dodal v main.css .top{ margin-top: 15px;} in potem dodal v spodnji class top ==>
+        ====> ce zeliš kako lastnost jo pac napises (glavni so premiki, pisava, barva..)
+         ===============================================================================================-->
+         
+                                         
+     <!-- POGOOGLI bootstrap grid na w3schoool da vidš kako z stolpci = col-velikost zgradis mrezo-->
+                                <h3 class="wow fadeInUp animated top" data-wow-delay=".1s" >
+                                <form class="form-horizontal top" action="/login" method="POST">
+                                        <div class="form-group">
+                                          <label class="control-label col-sm-5" for="uporabnisko_ime">Uporabniško ime:</label>
+                                           <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="uporabnisko" placeholder="Vnesi uporabniško ime" name="uporabnisko_ime">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="control-label col-sm-offset-2  col-sm-3" for="pwd">  &nbsp &nbsp Geslo:</label>
+                                          <div class="col-sm-3">          
+                                            <input type="password" class="form-control" id="pwd" placeholder="Vnesi geslo" name="geslo">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">        
+                                          <div class="col-sm-offset-4 col-sm-3">
+                                          
+                                            <div class="checkbox">
+                                             <a class=" text-muted underline " id="myBtn" href="#"><small>Pozabil sem geslo</small></a>
+                                             <label class="pull-left zmanjsaj"><input type="checkbox" name="zapomni"> Zapomni se me</label>
+                                          </div>                                                                                     
+                                        </div>
+                                                                                                                     
+                                        <div class="form-group top2">        
+                                          <div class="col-sm-offset-3 col-sm-5">
+                                            <button type="submit" class="btn  btn-default gumb1">Vpis</button>
+                                            <!-- gumb registracija gre na naslednji section ( <section id="reg"-->
+                                            <a class="btn  btn-default gumb1" data-wow-delay=".1s" href="#reg" data-section="#reg" >Registracija</a>
+                                          </div>
+                                        </div>
+                                </form>
+                                <!-- Konec logina! Seveda je treba še konec containerja , vrstice in stolpca.. zato so se konci divov (4x) -->                            
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            
+            
+            <!--
+                ====== ==================================================0
+                  REGISTRACIJA UPORABNIKA, ko klikneš register gre sem na to sekcijo id="reg"          
+                ===========================================================================================-->
+            <section id="reg" class="works">
+                <div class="container">
+                 <div class="row">
+                    <div class="col-md-6">
+                        <a class="btn btn-default bottom1"  href="#hero-area" >Nazaj na iskalnik</a>
+                                <form class="form-horizontal" action="/signup" method="POST">
+                                        <div class="form-group">
+                                          
+                                           <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="uporabnisko" placeholder="Uporabniško ime" name="uporabnisko_ime">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          
+                                          <div class="col-sm-8">          
+                                            <input type="password" class="form-control" id="pwd" placeholder="Geslo" name="geslo">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          
+                                          <div class="col-sm-8">          
+                                            <input type="password" class="form-control" id="pwd2" placeholder="Potrdi geslo" name="potrdi_geslo">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          
+                                          <div class="col-sm-8">          
+                                            <input type="text" class="form-control" id="telefon" placeholder="Telefon" name="telefon">
+                                          </div>
+                                        </div>
+                                         <div class="form-group">
+                                          
+                                          <div class="col-sm-8">          
+                                            <input type="email" class="form-control" id="email" placeholder="E-mail" name="email">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">        
+                                          <div class="col-sm-offset-3 col-sm-6">
+                                            
+                                            <!-- registracija gre na naslednji section = registracija-->
+                                            <button type="submit" class="btn btn-default">Registriraj se!</button>
+                                
+                                          </div>
+                                         </div>
+                             </form>
+                        </div>
+                        
+                        
+                    <!--TO JE DESNO OD REGISTRACIJE-->
+                     <div class="col-md-6">
+                        <div class="block">
+                            <h3 class="subtitle">Registriraj se in postani boljši človek!</h3>
+                            <p  class="" >
+                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequun. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </p>                          
+                        </div>
+                    </div>
+                    <!--konec, ostanejo samo še divi za konec containerja, vrstice, sekcije itd-->
+                </div>
+                 </div>
+            </div>
+         </section>
+         
+         
+         
+         
+              <!-- ČE KLIKNEŠ POZABIL GESLO ODPRE tale div, ni preko linka ampak ga odpre javascript, funkcija v main.js
+              
+            glej : https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_modal_js&stacked=h -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-size">
+        
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header" style="padding:20px 20px;">
+                <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"> Nazaj</button>
+                  
+                  
+                  <h4>Pozabil sem geslo</h4>
+                </div>
+                <div class="modal-body" style="padding:20px 20px;">
+                  <form class="form" action="/pwdreset" method="POST">
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="text" class="form-control" id="email" placeholder="Vnesi email">
+                    </div>
+                     <button type="submit" class="btn btn-success btn-block"> Reset </button>
+                  </form>
+                </div>
+                
+              </div>
+              
+            </div>
+        </div> 
+            <!--
+            
+
+            ==================================================
+            Footer 
+            ================================================== -->
+            <footer id="footer">
+                <div class="container">
+                    <div class="col-md-8">
+                        <p class="copyright">Copyright: <span>2017</span> . Design and Developed by Matic &Luka</p>
+                    </div>
+                    <div class="col-md-4">
+                        <!-- Social Media -->
+                        <ul class="social">
+                            <li>
+                                <a href="http://wwww.fb.com/" class="Facebook">
+                                    <i class="ion-social-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://wwww.twitter.com/" class="Twitter">
+                                    <i class="ion-social-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="Linkedin">
+                                    <i class="ion-social-linkedin"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://wwww.fb.com/" class="Google Plus">
+                                    <i class="ion-social-googleplus"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </footer> <!-- /#footer -->
+               
+
+        </body>
+    </html>

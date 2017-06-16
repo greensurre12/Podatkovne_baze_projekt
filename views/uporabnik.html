@@ -1,0 +1,147 @@
+
+%rebase('base.html')
+
+
+        <section id="hero-area" >
+            <div class="container top3">
+                <div class="row">
+                    <div class="col-md-12  text-center " >
+                        
+                        <div class="block wow fadeInUp"  data-wow-delay=".1s">
+                        <!-- Uporabinški vmesnik -->
+                              <h6 class="wow fadeInUp animated" data-wow-delay=".1s" >
+                                     Pozdravljen {{uporabnik}}!
+                                </h6>
+                               <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#objavi">Objavi</button>
+                                <button type="button" class="btn btn-default">Nastavitve</button>
+                                <button type="button" class="btn btn-default">Odjavi se</button> 
+                                <button type="button" class="btn btn-default">Iskalnik</button>   
+                                 <!-- tole ne deluje dobr, ker nemorm zamenjat na kakšno drugo pisavo, nevem še zakaj-->
+                                 <h4 class=" collapse wow fadeInUp animated text-center " id="objavi" data-wow-delay=".1s" >
+                                
+                                   <form class="form-horizontal " action="/signup" method="POST">
+                                        
+                                        <div class="form-group">                                          
+                                           <div class="col-sm-8 col-centered ">
+                                            <label for="od_kraj">Od:</label>
+                                            <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="zacetni_kraj">
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-group">                                          
+                                          <div class="col-sm-8 col-centered">
+                                           <label for="do_kraj">Do:</label>          
+                                            <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="koncni_kraj">
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                          <div class="col-sm-8 col-centered">
+                                                     <label for="datetime">Čas odhoda:</label> <br>          
+                                                    <input type ="datetime-local" min="{{zdaj}}" value ="{{zdaj}}" name="zacetek" id = "datetime" onkeyup='saveValue(this);'> 
+                                             
+                                              </div>
+                                        </div>
+                                                
+                                        <div class="form-group">
+                                          <div class="col-sm-8 col-centered">
+                                                     <label for="datetime1">Čas dohoda:</label><br>        
+                                                    <input type ="datetime-local" min="{{zdaj}}" value ="{{zdaj}}" name="konec" id = "datetime1" onkeyup='saveValue(this);'> 
+                                              </div>
+                                        </div>
+                                        
+                                        <!-- skopirana forma za select iz strani: https://www.w3schools.com/bootstrap/bootstrap_forms_inputs.asp-->        
+                                        <div class="form-group">
+                                                <div class="col-sm-8 col-centered">
+                                                  <label for="prosta_mesta">Stevilo prostih mest:</label>  
+                                                  <select class="form-control" id="prosta_mesta">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                  </select>
+                                                </div>
+                                        </div>
+                                        
+                                        <div class="form-group">        
+                                            <div class="col-sm-offset-3 col-sm-6 "> 
+                                              <button type="submit" class="btn btn-default">Objavi prevoz!</button>
+                                              <a class="btn btn-default capitalize" data-toggle="collapse" href="#objavi" >Zapri</a>
+                                            </div>
+                                         </div>
+                                         
+                              
+                                  </form>    
+                                </h4> 
+                                                    
+                            </div>
+                            
+                        </div>
+                    
+                        <!--Iskalnik prevozov-->
+                    <div class ="row">
+                        <div class="col-md-12  text-center"  >
+                           <!-- <div data-spy="affix" id="iskalnik" data-offset-top="10" >-->
+                            <div class="block wow fadeInUp "  data-wow-delay=".1s">    
+                                            
+                                <h2 class="wow fadeInUp animated "  data-wow-delay=".1s" >
+                                    Poišči prevoz!
+                                
+                                                     
+                                  <form class="form-inline  "   action="/isci" method="post">
+                                    <div class="form-group" >
+                                        <label for="od_kraj">Od:</label>
+                                        <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhodni">
+                                   </div>
+                                    <div class="form-group">
+                                        <label for="do_kraj">Do:</label>
+                                        <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="dohodni">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-default">Isci!</button>
+                                </form>
+                                
+                             </h2>                         
+                            
+                      <!--  </div> -->
+                        </div>
+                        </div>
+                    </div>
+                       
+                </div>
+            </div>
+         </section>
+            
+                    <!--konec, ostanejo samo še koneci divov za konec containerja, vrstice, sekcije itd-->
+                
+        
+            
+           
+        
+<script type="text/javascript">
+        document.getElementById("txt_1").value = getSavedValue("txt_1");    
+        document.getElementById("txt_2").value = getSavedValue("txt_2");  
+        document.getElementById("txt_3").value = getSavedValue("txt_3");
+        document.getElementById("txt_4").value = getSavedValue("txt_4"); 
+        /* Here you can add more inputs to set value. if it's saved */
+
+        //Save the value function - save it to localStorage as (ID, VALUE)
+        function saveValue(e){
+            var id = e.id;  // get the sender's id to save it . 
+            var val = e.value; // get the value. 
+            localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override . 
+        }
+
+        //get the saved value function - return the value of "v" from localStorage. 
+        function getSavedValue  (v){
+            if (localStorage.getItem(v) === null) {
+                return "";// You can change this to your defualt value. 
+            }
+            return localStorage.getItem(v);
+        }
+        $(function () {
+
+  
+
+
+</script>

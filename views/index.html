@@ -1,0 +1,203 @@
+% rebase('base.html')
+<!-- BERI: *pejt čez cel https://www.w3schools.com/bootstrap/default.asp od html , css, in še javascript da vidš 
+            kere funkcije lahko uporabiš
+           *fadeInup animated ti naredi efekt da tekst potegne (glej v browserju)
+           *preberi si kako deluje bootstrap mreža (sestavljena je iz vrstic dolgih 12, ki jih razdeliš na stolpce, ki so skupaj 
+           široki 12 (col-md-6 in col-md-6) https://v4-alpha.getbootstrap.com/layout/grid/
+           *NUJNO POTREBUJEŠ dober program da lahko več datotek naekrat urejaš, jaz imam Eclipse, je super
+           *navigacijski meni in footer sta za vse strani enaka zato sta spravljena v base.html datoteki.
+           *z napisi mi nekaj ne deluje dober se še jebem, da bo lahko čist prilagodljivo vse...
+           *kar delaš večino časa je google: bootstrap how to add button itd itd..
+           *urejaš tako da v main.css dodajaš kake efekte in potem v class dopišeš, glej primer ko sem spodaj v 4 vrstici dodal
+           top, ki mi samo zamakne zgornji del za nekaj px, efekt je spisan v static/main.css  (search: #hero-area .top)
+           *vglavnem so vse stvari v divih - okvirčih, ki imajo lastnosti
+           *poklic ce kej ne veš         
+           
+           
+           -->
+           
+        <section id="hero-area" >
+            <div class="container ">
+                <div class="row">
+                    <div class="col-md-12 text-center top">
+                        <div class="block wow fadeInUp" data-wow-delay=".1s">
+                            
+                            <!-- ce napises class = "wow fadeInUp animated" je to animacija ki potegne navzgor (glej spletno)-->
+                               
+                                        
+                                <h1 class="wow fadeInUp animated cd-headline slide" data-wow-delay=".2s" >
+                                <span class="">Prevoznik.si</span><br>
+                                </h1>
+                                <h2 class="wow fadeInUp animated" data-wow-delay=".1s" >
+                                    Poišči prevoz!
+                                    
+                                <!-- TU JE OSNOVNI ISKALNIK PREVOZOV - le malo lepša forma  -->
+                                <form class="form-inline" action="/isci" method="post">
+                                    <div class="form-group">
+                                        <label for="od_kraj">Od:</label>
+                                        <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhodni">
+                                   </div>
+                                    <div class="form-group">
+                                        <label for="do_kraj">Do:</label>
+                                        <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="dohodni">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-default">Isci!</button>
+                                </form>
+                                </h2>
+                                %if napaka:
+                                        <p style="color:red;">{{napaka}}<p>
+                                %end
+                                                        
+        <!--V vsak class dodajaš tudi kaksno lasnost, npr zelis premaknen gumb za par pikslov (npr hotu sm da je odmaknjena
+        forma za 20px od napisa "Za objavo prevoza se vpisi ali registriraj"..)
+        Tako sem dodal v main.css .top{ margin-top: 15px;} in potem dodal v spodnji class top ==>
+        ====> ce zeliš kako lastnost jo pac napises (glavni stvari k jih počneš so premiki, pisava, barva..)
+         ===============================================================================================-->
+         
+                                         
+     <!-- POGOOGLI bootstrap grid na w3schoool da vidš kako z stolpci = col-velikost zgradis mrezo-->
+                                <h3 class="wow fadeInUp animated " data-wow-delay=".1s" >
+                                 Za objavo prevoza se vpiši ali registriraj!
+                                    <form class="form-horizontal " action="/login" method="POST">
+                                        <div class="form-group">
+                                          <label class="control-label col-sm-5" for="uporabnisko_ime">Uporabniško ime:</label>
+                                           <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="uporabnisko" placeholder="Vnesi uporabniško ime" name="uporabnisko_ime">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="control-label col-sm-offset-2  col-sm-3" for="pwd">  &nbsp &nbsp Geslo:</label>
+                                          <div class="col-sm-3">          
+                                            <input type="password" class="form-control" id="pwd" placeholder="Vnesi geslo" name="geslo">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">        
+                                          <div class="col-sm-offset-4 col-sm-3">
+                                          
+                                            <div class="checkbox">
+                                             <a class=" text-muted underline " id="myBtn" href="#"><small>Pozabil sem geslo</small></a>
+                                             <label class="pull-left zmanjsaj"><input type="checkbox" name="zapomni"> Zapomni se me</label>
+                                          </div>                                                                                     
+                                        </div>
+                                                                                                                     
+                                        <div class="form-group top2">        
+                                          <div class="col-sm-offset-3 col-sm-5">
+                                            <button type="submit" class="btn  btn-default gumb1">Vpis</button>
+                                            <!-- gumb registracija gre na naslednji section ( <section id="reg"-->
+                                            <a class="btn  btn-default gumb1" data-wow-delay=".1s" href="#reg" data-section="#reg" >Registracija</a>
+                                          </div>
+                                        </div>
+                                </form>
+                                <!-- Konec logina! Seveda je treba še konec containerja , vrstice in stolpca.. zato so se konci divov (4x) -->                            
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            
+            
+            <!--
+                ====== ==================================================##################
+                  REGISTRACIJA UPORABNIKA, ko klikneš register gre sem na to sekcijo id="reg"          
+                ===========================================================================================-->
+            <section id="reg" class="works">
+                <div class="container">
+                 <div class="row">
+                    <div class="col-md-6">
+                        <a class="btn btn-default bottom1"  href="#hero-area" >Nazaj na iskalnik</a>
+                                <form class="form-horizontal" action="/signup" method="POST">
+                                        <div class="form-group">
+                                          
+                                           <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="uporabnisko" placeholder="Uporabniško ime" name="uporabnisko_ime">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          
+                                          <div class="col-sm-8">          
+                                            <input type="password" class="form-control" id="pwd" placeholder="Geslo" name="geslo">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          
+                                          <div class="col-sm-8">          
+                                            <input type="password" class="form-control" id="pwd2" placeholder="Potrdi geslo" name="potrdi_geslo">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          
+                                          <div class="col-sm-8">          
+                                            <input type="text" class="form-control" id="telefon" placeholder="Telefon" name="telefon">
+                                          </div>
+                                        </div>
+                                         <div class="form-group">
+                                          
+                                          <div class="col-sm-8">          
+                                            <input type="email" class="form-control" id="email" placeholder="E-mail" name="email">
+                                          </div>
+                                        </div>
+                                        <div class="form-group">        
+                                          <div class="col-sm-offset-3 col-sm-6">
+                                            
+                                            <!-- registracija gre na naslednji section = registracija-->
+                                            <button type="submit" class="btn btn-default">Registriraj se!</button>
+                                
+                                          </div>
+                                         </div>
+                             </form>
+                        </div>
+                        
+                        
+                    <!--TO JE DESNO OD REGISTRACIJE-->
+                     <div class="col-md-6">
+                        <div class="block">
+                            <h3 class="subtitle">Registriraj se in postani boljši človek!</h3>
+                            <p  class="" >
+                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequun. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </p>                          
+                        </div>
+                    </div>
+                    <!--konec, ostanejo samo še divi za konec containerja, vrstice, sekcije itd-->
+                </div>
+                 </div>
+            </div>
+         </section>
+         
+         
+         
+         
+              <!-- ČE KLIKNEŠ POZABIL GESLO ODPRE tale div, ni preko linka ampak ga odpre javascript, funkcija v main.js
+              
+            glej : https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_modal_js&stacked=h -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-size">
+        
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header" style="padding:20px 20px;">
+                <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"> Nazaj</button>
+                  
+                  
+                  <text class="tekst">Pozabil sem geslo</text>
+                </div>
+                <div class="modal-body" style="padding:20px 20px;">
+                  <form class="form" action="/pwdreset" method="POST">
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="text" class="form-control" id="email" placeholder="Vnesi email">
+                    </div>
+                     <button type="submit" class="btn btn-success btn-block"> Reset </button>
+                  </form>
+                </div>
+                
+              </div>
+              
+            </div>
+        </div> 
+            <!--
+            
+
+      
