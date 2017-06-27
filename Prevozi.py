@@ -64,7 +64,7 @@ def prva_stran():
 def glavna_stran(uporabnik):
     cookie = request.get_cookie('account', secret=secret)
     if str(cookie) == uporabnik:
-        return bottle.template("uporabnik.html", napaka=False, uporabnik=uporabnik,zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
+        return bottle.template("uporabnik.html", napaka=False, uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
     else:
         return redirect("/")
 
@@ -73,8 +73,7 @@ def glavna_stran(uporabnik):
 
 #@route('/signup', method = "GET")       #prvi @route prikaze template, drugi pobere podatke ki jih uporabnik vpise
 #def signup():
-   #"""Prikaze template na strani"""
-    #return template("signup.html", napaka=False)
+
 
 @route('/signup', method= "POST")
 def signup():
@@ -92,7 +91,6 @@ def signup():
             
     elif geslo != potrdi_geslo:
         return bottle.template("index.html", napaka="Gesli se ne ujemata!")
-
     elif len(geslo)<4: #Neke omejitve glede na geslo, ime, telefon. Lahko poljubno spreminjas.
         return bottle.template("index.html", napaka="Geslo naj ima vsaj 4 znake!")
     elif len(uporabnisko_ime)<4:
@@ -104,7 +102,8 @@ def signup():
         geslo = funkcije.password_md5(geslo) #zakodira geslo za shranjevanje
         cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon,email) VALUES (DEFAULT, %s, %s, %s,%s)", (uporabnisko_ime, geslo, telefon,email))
         bottle.response.set_cookie("account", value=uporabnisko_ime, secret=secret, path='/') #cookie 
-        return redirect('/{0}'.format(uporabnisko_ime)) #na glavno stran
+        
+        return redirect('/{0}'.format(uporabnisko_ime)) 
 
 ########################################################################################        
 """LOGIN"""
@@ -176,8 +175,14 @@ def objavi_post(uporabnik):
 """SEARCH"""
 @route('/<uporabnik>/isci')
 def isci(uporabnik):
-    
-        return template("iskanje.html",uporabnik1=uporabnik)
+
+    odhod = bottle.request.forms.odhod
+    prihod = bottle.request.forms.prihod
+    datum = bottle.request.forms.datum
+        
+    cur.execute("SELECT * FROM prevoz WHERE zacetek ILIKE '%{0}%' OR prihod ILIKE '%{0}%' AND zacetek::date ILIKE datum AND age(zacetek) > 0")
+       
+    return template("iskanje.html",uporabnik1=uporabnik)
     
 
 run()
