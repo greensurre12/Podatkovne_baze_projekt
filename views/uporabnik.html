@@ -19,11 +19,7 @@
                                 <div class="row" >
                                   <div class="col-sm-4">
                                   </div>
-                                  
-                                  <div class="col-sm-1">
-                                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#objavi">Objavi</button>
-                                  </div>
-                                  
+
                                   <div class="col-sm-1">
                                     <form  class="form-horizontal " action="/logout" method="GET">
                                       <button type="submit" class="btn btn-default">Odjavi se</button> 
@@ -31,20 +27,37 @@
                                   </div>
                                   
                                   <div class="col-sm-1">
+                                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#objavi">Objavi</button>
+                                  </div>
+                                  
+                                  <div class="col-sm-1">
                                     <form class="form-horizontal" action="/search" method="GET">
                                       <button type="submit" class="btn btn-default">Iskalnik</button>
                                     </form>
                                   </div>
+                                  </div>
+                                  
+                                  <div class="row">
+                                    <div class="col-sm-6">
+                                         .
+                                    </div>                              
+                                  </div>
+                                  
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                    </div>
+                                    <div class="col-sm-1">
+                                      <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moji_prevozi">Moji prevozi</button>
+                                    </div>
 
-                                  <div class="col-sm-1">
-                                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moji_prevozi">Moji prevozi</button>
+                                    <div class="col-sm-2">
+                                      <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#objavljeni_prevozi">Objavljeni prevozi</button>
+                                    </div>
                                   </div>
-                                  div class="col-sm-1">
-                                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#objavljeni_prevozi">Objavljeni prevozi</button>
-                                  </div>
-                                </div>
+                                
 
                                  <h4 class=" collapse wow fadeInUp animated text-center " id="moji_prevozi" data-wow-delay=".1s" >
+                                 <label>Moji prevozi:</label>
                                   %for i in moji_prevozi:
                                     <div class="row">
                                       <div class=col-sm-4>
@@ -68,6 +81,8 @@
                                 </h4>
 
                                 <h4 class=" collapse wow fadeInUp animated text-center " id="objavljeni_prevozi" data-wow-delay=".1s" >
+                                  <label>Objavljeni prevozi:</label>
+
                                   %for i in objavljeni_prevozi:
                                     <div class="row">
                                       <div class=col-sm-4>

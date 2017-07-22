@@ -88,9 +88,9 @@ def login():
 	if cur.rowcount == 0: 
 		return bottle.template("index.html", napaka="Napacno uporabnisko ime ali geslo!")
 
-    else: 
-        bottle.response.set_cookie('account', value=uporabnisko_ime, secret=secret, path='/')
-        return redirect('/{0}'.format(uporabnisko_ime))
+	else:
+		bottle.response.set_cookie('account', value=uporabnisko_ime, secret=secret, path='/')
+		return redirect('/{0}'.format(uporabnisko_ime))
 
 ########################################################################################     
 """LOGOUT"""
@@ -106,23 +106,21 @@ def logout():
 """GLAVNA STRAN"""
 
 @route("/<uporabnik>", method = "GET")
+def glavna_stran(uporabnik):
 	"""Glavna stran aplikacije. Preveri piskotek, ce ga ni, se vrne na prvo stran. 
 	Od tu so gumbi na iskalnik in odjavo. Gumb 'Moji prevozi' prikaze prevoze, na katere je uporabnik ze prijavljen. Gumb 'Objavi' prikaze moznost, da uporabnik 
 	objavi svoj prevoz.
 	POST metoda obdela objavo novega prevoza."""
-def glavna_stran(uporabnik):
-    cookie = request.get_cookie('account', secret=secret)
+	cookie = request.get_cookie('account', secret=secret)
 
-
-    if str(cookie) == uporabnik:
+	if str(cookie) == uporabnik:
 		cur.execute("SELECT * FROM(SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki WHERE narocnik = %s",[uporabnik])
 		moji_prevozi = cur.fetchall()
 		cur.execute("SELECT * FROM prevoz WHERE objavil = %s", [uporabnik])
 		objavljeni_prevozi = cur.fetchall()
-    	return bottle.template("uporabnik.html", sporocilo="", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi = moji_prevozi)
-    
-    else:
-    	return redirect("/")
+		return bottle.template("uporabnik.html", sporocilo="", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi = moji_prevozi, objavljeni_prevozi=objavljeni_prevozi)
+	else:
+		return redirect("/")
 
 @route("/<uporabnik>", method = "POST")
 def glavna_stran(uporabnik):
@@ -156,9 +154,9 @@ def glavna_stran(uporabnik):
 ########################################################################################    
 """SEARCH"""
 @route("/search", method = "GET")
+def isci():
 	"""Iskalnik, zahteva zacetni in koncni kraj in stevilo potnikov. Metoda POST podatke obdela in prikaze stran z rezultati iskanja. Tam se pokazejo vsi prevozi, ki vstrezajo parametrom iskanja in
 	vsaj se dovolj prostora za zeljeno stevilo potnikov."""
-def isci():
 	uporabnik = str(request.get_cookie('account', secret=secret))
 	cur.execute("SELECT 1 FROM uporabnik WHERE username = %s", [uporabnik])
 
@@ -193,8 +191,8 @@ def isci():
 """PRIJAVA"""
 
 @route('/prijava/<id_prevoza>&<st_potnikov>', method = "POST")
-"""Obdela prijavo na prevoz, hkrati odsteje prijavljena mesta od prostih mest v prevozu. Vrne se na glavno stran."""
 def prijava(id_prevoza, st_potnikov):
+	"""Obdela prijavo na prevoz, hkrati odsteje prijavljena mesta od prostih mest v prevozu. Vrne se na glavno stran."""
 	uporabnik = str(request.get_cookie('account', secret=secret))
 	
 	cur.execute("INSERT INTO narocanje(narocnik, prevoz, mesta) VALUES (%s, %s, %s)",(uporabnik, id_prevoza, st_potnikov))
