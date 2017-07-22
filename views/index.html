@@ -28,23 +28,7 @@
                                 <h1 class="wow fadeInUp animated cd-headline slide" data-wow-delay=".2s" >
                                 <span class="">Prevoznik.si</span><br>
                                 </h1>
-                                <h2 class="wow fadeInUp animated" data-wow-delay=".1s" >
-                                    Poišči prevoz!
-                                    
-                                <!-- TU JE OSNOVNI ISKALNIK PREVOZOV - le malo lepša forma  -->
-                                <form class="form-inline" action="/isci" method="post">
-                                    <div class="form-group">
-                                        <label for="od_kraj">Od:</label>
-                                        <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhodni">
-                                   </div>
-                                    <div class="form-group">
-                                        <label for="do_kraj">Do:</label>
-                                        <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="dohodni">
-                                    </div>
-                                    
-                                    <button type="submit" class="btn btn-default">Isci!</button>
-                                </form>
-                                </h2>
+
                                 %if napaka:
                                         <p style="color:red;">{{napaka}}<p>
                                 %end
@@ -74,20 +58,20 @@
                                         </div>
                                         <div class="form-group">        
                                           <div class="col-sm-offset-4 col-sm-3">
-                                          
-                                            <div class="checkbox">
+                                            
                                              <a class=" text-muted underline " id="myBtn" href="#"><small>Pozabil sem geslo</small></a>
-                                             <label class="pull-left zmanjsaj"><input type="checkbox" name="zapomni"> Zapomni se me</label>
-                                          </div>                                                                                     
-                                        </div>
+                                                                                                                             
+                                          </div>
                                                                                                                      
                                         <div class="form-group top2">        
                                           <div class="col-sm-offset-3 col-sm-5">
-                                            <button type="submit" class="btn  btn-default gumb1">Vpis</button>
+                                            <button type="submit" class="btn  btn-default gumb1" >Vpis</button>
                                             <!-- gumb registracija gre na naslednji section ( <section id="reg"-->
+                                          
+
                                             <a class="btn  btn-default gumb1" data-wow-delay=".1s" href="#reg" data-section="#reg" >Registracija</a>
                                           </div>
-
+                                          </div>
 
 
                                         </div>
@@ -98,9 +82,11 @@
                         </div>
                     </div>
                 </div>
+                
+            
             </section>
             
-            
+          
             
             <!--
                 ====== ==================================================##################
@@ -110,7 +96,7 @@
                 <div class="container">
                  <div class="row">
                     <div class="col-md-6">
-                        <a class="btn btn-default bottom1"  href="#hero-area" >Nazaj na iskalnik</a>
+                        <a class="btn btn-default bottom1"  href="#hero-area" >Nazaj na vrh</a>
                                 <form class="form-horizontal" action="/signup" method="POST">
                                         <div class="form-group">
                                           

@@ -13,14 +13,16 @@ conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 #ZA TABELO KRAJI:
-#with open ("Seznam_krajev.txt", "r") as datoteka:
-#    seznam_krajev = [i.strip()[5:] for i in datoteka]
+with open ("Seznam_krajev.txt", "r") as datoteka:
+	seznam_krajev = [i.strip()[5:] for i in datoteka]
 #
 #    
 ##cur.executemany("""INSERT INTO kraj (ime) VALUES (%s)""", seznam_krajev) #TO NE DELA ZARAD NEKIH CUDNIH RAZLOGOV
 #
+
 #for i in seznam_krajev:
-#    cur.execute("""INSERT INTO kraj (ime) VALUES ('{}')""".format(str(i)))
+#	print(i)
+#	cur.execute("""INSERT INTO kraj (ime) VALUES ('{}')""".format(str(i)))
 #
-run()
+#run()
 

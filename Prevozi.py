@@ -2,7 +2,7 @@
 
 import bottle
 from bottle import *
-import hashlib # računanje MD5 kriptografski hash za gesla
+import hashlib
 import auth_public as auth
 import psycopg2, psycopg2.extensions, psycopg2.extras
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
@@ -29,69 +29,37 @@ def static(filename):
        /static/..."""
     return bottle.static_file(filename, root=static_dir)
 
-
-######################################################################
-"""PREBERI TO
--cookies: cookie ima ime account, v njem je shranjeno uporabnisko ime, hashano ker ga lahko kdorkoli bere
--redirect: ce hoces na istem naslovu pokazat nekaj drugega, uporabis return(template), ce pa hoces uporabnika
- poslat na drugo stran, uporabis redirect. Argumente v redirect shranis v url, ki ga posljes ali pa v cookie.
--ZDI SE MI da je treba ob vsaki novi preusmeritvi cookie preveriti
-"""
-
-
-
-
-
-
 ######################################################################
 """PRVA STRAN"""
 
 @route("/")
 def prva_stran():
-    cookie = str(request.get_cookie('account', secret=secret))
-    cur.execute("SELECT 1 FROM uporabnik WHERE username=%s", [cookie])    
 
-    #if cur.rowcount == 0:        
-    return bottle.template("index.html", napaka=False) 
-    #ce ze ma cookie ga avtomatsko logira
-    #else:
-        #return redirect('/{0}'.format(cookie))
+	return bottle.template("index.html", napaka=False) 
 
 ######################################################################
-"""GLAVNA STRAN"""
-
-@route("/<uporabnik>")
-def glavna_stran(uporabnik):
-    cookie = request.get_cookie('account', secret=secret)
-    if str(cookie) == uporabnik:
-        return bottle.template("uporabnik.html", napaka=False, uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
-    else:
-        return redirect("/")
-
-######################################################################
-"""SIGNUP je kar na isti strani kot index.html"""
-
-#@route('/signup', method = "GET")       #prvi @route prikaze template, drugi pobere podatke ki jih uporabnik vpise
-#def signup():
-
+"""SIGNUP"""
 
 @route('/signup', method= "POST")
 def signup():
-    """Registrira novega uporabnika."""
+    """Registrira novega uporabnika. Preveri ce uporabnisko ime ze obstaja, ce se gesli ujemata, ce sta geslo, uporabnisko ime, telefon dovolj dolgi. Ce je vse ok, hashano geslo 
+    in podatke o uporabniku shrani v tabelo uporabnik v bazi. Nastavi piskotek in prikaze glavno stran."""
          
     uporabnisko_ime = bottle.request.forms.uporabnisko_ime 
     geslo = bottle.request.forms.geslo
     potrdi_geslo = bottle.request.forms.potrdi_geslo
     telefon = bottle.request.forms.telefon
     email= bottle.request.forms.email
+
+
     cur.execute("SELECT 1 FROM uporabnik WHERE username=%s", [uporabnisko_ime])
 
-    if cur.rowcount != 0: #ce SELECT najde nekaj -> ta username ze obstaja
+    if cur.rowcount != 0: 
         return bottle.template("index.html", napaka="To uporabnisko ime že obstaja!")
             
     elif geslo != potrdi_geslo:
         return bottle.template("index.html", napaka="Gesli se ne ujemata!")
-    elif len(geslo)<4: #Neke omejitve glede na geslo, ime, telefon. Lahko poljubno spreminjas.
+    elif len(geslo)<4: 
         return bottle.template("index.html", napaka="Geslo naj ima vsaj 4 znake!")
     elif len(uporabnisko_ime)<4:
         return bottle.template("index.html", napaka="Uporabnisko ime naj ima vsaj 4 znake!")
@@ -99,9 +67,9 @@ def signup():
         return bottle.template("index.html", napaka="Telefon je obvezen!")
         
     else:
-        geslo = funkcije.password_md5(geslo) #zakodira geslo za shranjevanje
+        geslo = funkcije.password_md5(geslo) 
         cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon,email) VALUES (DEFAULT, %s, %s, %s,%s)", (uporabnisko_ime, geslo, telefon,email))
-        bottle.response.set_cookie("account", value=uporabnisko_ime, secret=secret, path='/') #cookie 
+        bottle.response.set_cookie("account", value=uporabnisko_ime, secret=secret, path='/') 
         
         return redirect('/{0}'.format(uporabnisko_ime)) 
 
@@ -110,79 +78,131 @@ def signup():
 
 @route('/login', method="POST")
 def login():
+	"""Logira ze obstojecega uporabnika. Preveri ce se hasha gesel ujemata, ce je prijava uspesna prikaze glavno stran, drugace se vrne na prvo stran z sporocilom o neuspesni prijavi."""
+
     
-    uporabnisko_ime = bottle.request.forms.uporabnisko_ime 
-    geslo = funkcije.password_md5(bottle.request.forms.geslo)
-    cur.execute("SELECT 1 FROM uporabnik WHERE username=%s AND geslo=%s",[uporabnisko_ime, geslo])
+	uporabnisko_ime = bottle.request.forms.uporabnisko_ime 
+	geslo = funkcije.password_md5(bottle.request.forms.geslo)
+	cur.execute("SELECT 1 FROM uporabnik WHERE username=%s AND geslo=%s",[uporabnisko_ime, geslo])
 
-    if cur.rowcount == 0: #ce SELECT ne najde nicesar -> ta kombinacija (username, password) ne obstaja
-        return bottle.template("index.html", napaka="Napacno uporabnisko ime ali geslo!")
+	if cur.rowcount == 0: 
+		return bottle.template("index.html", napaka="Napacno uporabnisko ime ali geslo!")
 
-    else: #uspesen login
+    else: 
         bottle.response.set_cookie('account', value=uporabnisko_ime, secret=secret, path='/')
         return redirect('/{0}'.format(uporabnisko_ime))
-
 
 ########################################################################################     
 """LOGOUT"""
 
 @bottle.get('/logout')
 def logout():
-    """Pobriši cookie in preusmeri na login."""
-    bottle.response.delete_cookie('account',secret=secret)
-    return redirect('/')
 
-########################################################################################
-"""OBJAVA PREVOZA"""
+	bottle.response.delete_cookie('accout', secret=secret)
+	return redirect('/')
 
-@route('/<uporabnik>/objavi')
-def objavi(uporabnik):
-    cur.execute("SELECT 1 FROM uporabnik WHERE username=%s", [uporabnik])
 
-    if cur.rowcount == 0: #ce uporabnika ni v bazi, npr če naroke napišeš /objavi/neobstoječ_uporabnik , to ne sme!!
-        return template("prva_stran.html", napaka = "Žal ta uporabnik ne obstaja!")
-    else:
-        return template("objavi.html",uporabnik = uporabnik,napaka=False, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M')) #tisti koledar nebo dovolil vnosa manjsega od zdaj
+######################################################################
+"""GLAVNA STRAN"""
+
+@route("/<uporabnik>", method = "GET")
+	"""Glavna stran aplikacije. Preveri piskotek, ce ga ni, se vrne na prvo stran. 
+	Od tu so gumbi na iskalnik in odjavo. Gumb 'Moji prevozi' prikaze prevoze, na katere je uporabnik ze prijavljen. Gumb 'Objavi' prikaze moznost, da uporabnik 
+	objavi svoj prevoz.
+	POST metoda obdela objavo novega prevoza."""
+def glavna_stran(uporabnik):
+    cookie = request.get_cookie('account', secret=secret)
+
+
+    if str(cookie) == uporabnik:
+		cur.execute("SELECT * FROM(SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki WHERE narocnik = %s",[uporabnik])
+		moji_prevozi = cur.fetchall()
+		cur.execute("SELECT * FROM prevoz WHERE objavil = %s", [uporabnik])
+		objavljeni_prevozi = cur.fetchall()
+    	return bottle.template("uporabnik.html", sporocilo="", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi = moji_prevozi)
     
-@route('/<uporabnik>/objavi', method = "POST")
-def objavi_post(uporabnik):
-    ''' /objavi/<name> : forma v html na glavni strani sprejme /objavi/upobraniško_ime, zato da ga lahko upiševa v bazo.
-    nekako morava zaščititi to, da lahko dostopiš do wwww.spletna.com/objavi/, le če si loginan, drugače te mora zavrniti'''
-    zacetek = bottle.request.forms.zacetek
-    zacetni_kraj=bottle.request.forms.zacetni_kraj
-    konec = bottle.request.forms.konec
-    koncni_kraj = bottle.request.forms.koncni_kraj
-    prosta_mesta = bottle.request.forms.prosta_mesta
-    uporabnisko_ime = uporabnik
-    print("objavi2")
-
-    ##
-    cur.execute("SELECT 1 FROM kraj WHERE ime=%s",[zacetni_kraj])
-    if cur.rowcount == 0:
-        return template("objavi.html", napaka = "Zacetni kraj ne obstaja!", uporabnik = uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
-
-    cur.execute("SELECT 1 FROM kraj WHERE ime=%s",[koncni_kraj])
-    if cur.rowcount == 0:
-        return template("objavi.html", napaka = "Koncni kraj ne obstaja!", uporabnik = uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
-
     else:
-        id = cur.execute("SELECT id FROM uporabnik WHERE username=%s", [uporabnik]) #poisce id uporabnika
-        cur.execute("INSERT INTO prevoz (id,objavil,  zacetek,zacetni_kraj,konec,koncni_kraj,prosta_mesta) VALUES (DEFAULT,%s,%s,%s,%s,%s,%s)",
-                                        (uporabnik,zacetek,zacetni_kraj,konec,koncni_kraj,prosta_mesta)) 
-        return template("glavna_stran.html",uporabnik=uporabnik, napaka= "Uspesno si objavil prevoz!")
+    	return redirect("/")
+
+@route("/<uporabnik>", method = "POST")
+def glavna_stran(uporabnik):
+	zacetni_kraj = bottle.request.forms.zacetni_kraj
+	koncni_kraj = bottle.request.forms.koncni_kraj
+	zacetek = bottle.request.forms.zacetek
+	konec = bottle.request.forms.konec
+	prosta_mesta = bottle.request.forms.prosta_mesta
+	uporabnik =  str(request.get_cookie('account', secret=secret))
+
+
+	cur.execute("SELECT 1 FROM kraj WHERE ime = %s", [zacetni_kraj])
+	if cur.rowcount == 0:
+		return bottle.template("uporabnik.html", sporocilo="Zacetni kraj ne obstaja!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
+
+	cur.execute("SELECT 1 FROM kraj WHERE ime = %s", [koncni_kraj])
+	if cur.rowcount == 0:
+		return bottle.template("uporabnik.html", sporocilo="Koncni kraj ne obstaja!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
+
+	if zacetek < datetime.now():
+		return bottle.template("uporabnik.html", sporocilo="Objava prevozov za nazaj ni mogoca!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
+	
+	else:
+		id = cur.execute("SELECT id FROM uporabnik WHERE username=%s", [uporabnik])
+		cur.execute("INSERT INTO prevoz (id,objavil,  zacetek,zacetni_kraj,konec,koncni_kraj,prosta_mesta) VALUES (DEFAULT,%s,%s,%s,%s,%s,%s)",(uporabnik,zacetek,zacetni_kraj,konec,koncni_kraj,prosta_mesta)) 
+
+		return bottle.template ("uporabnik.html", sporocilo="Uspesno si objavil prevoz!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))                              
+
+
 
 ########################################################################################    
 """SEARCH"""
-@route('/<uporabnik>/isci')
-def isci(uporabnik):
+@route("/search", method = "GET")
+	"""Iskalnik, zahteva zacetni in koncni kraj in stevilo potnikov. Metoda POST podatke obdela in prikaze stran z rezultati iskanja. Tam se pokazejo vsi prevozi, ki vstrezajo parametrom iskanja in
+	vsaj se dovolj prostora za zeljeno stevilo potnikov."""
+def isci():
+	uporabnik = str(request.get_cookie('account', secret=secret))
+	cur.execute("SELECT 1 FROM uporabnik WHERE username = %s", [uporabnik])
 
-    odhod = bottle.request.forms.odhod
-    prihod = bottle.request.forms.prihod
-    datum = bottle.request.forms.datum
-        
-    cur.execute("SELECT * FROM prevoz WHERE zacetek ILIKE '%{0}%' OR prihod ILIKE '%{0}%' AND zacetek::date ILIKE datum AND age(zacetek) > 0")
-       
-    return template("iskanje.html",uporabnik1=uporabnik)
+	if cur.rowcount == 0:
+		return redirect("index.html", napaka=False) 
+
+	else:
+		return bottle.template("iskanje.html", zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), uporabnik=uporabnik)
+
+@route('/search', method = "POST")
+def isci():
+	uporabnik = str(request.get_cookie('account', secret=secret))
+
+
+	odhod = bottle.request.forms.odhod
+	prihod = bottle.request.forms.prihod
+	st_potnikov = bottle.request.forms.st_potnikov
+
+
+	if odhod == None:
+		odhod = ""
+	if prihod == None:
+		prihod = ""
+
+	cur.execute("SELECT * FROM prevoz WHERE prosta_mesta >= %s AND zacetni_kraj ILIKE %s AND koncni_kraj ILIKE %s ", [st_potnikov, odhod, prihod])
     
+	rezultat_iskanja = cur.fetchall() #type() = tuple
+
+	return bottle.template("rezultati.html",zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), rezultat_iskanja=rezultat_iskanja, uporabnik=uporabnik, st_potnikov=st_potnikov)
+ 
+########################################################################################    
+"""PRIJAVA"""
+
+@route('/prijava/<id_prevoza>&<st_potnikov>', method = "POST")
+"""Obdela prijavo na prevoz, hkrati odsteje prijavljena mesta od prostih mest v prevozu. Vrne se na glavno stran."""
+def prijava(id_prevoza, st_potnikov):
+	uporabnik = str(request.get_cookie('account', secret=secret))
+	
+	cur.execute("INSERT INTO narocanje(narocnik, prevoz, mesta) VALUES (%s, %s, %s)",(uporabnik, id_prevoza, st_potnikov))
+	cur.execute("UPDATE prevoz SET prosta_mesta = prosta_mesta-%s WHERE id = %s", (st_potnikov, id_prevoza))
+
+	return redirect("/{0}".format(uporabnik))
+  
+
+
 
 run()

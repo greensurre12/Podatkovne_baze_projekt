@@ -1,0 +1,60 @@
+
+%rebase('base.html')
+
+        <section id="hero-area" >
+                            <div class ="row">
+                        <div class="col-md-12  text-center"  >
+                           <!-- <div data-spy="affix" id="iskalnik" data-offset-top="10" >-->
+                            <div class="block wow fadeInUp "  data-wow-delay=".1s">    
+                                            
+                                <h2 class="wow fadeInUp animated "  data-wow-delay=".1s" >
+                                    Poišči prevoz!
+                                
+                                                     
+								<form class="form-horizontal " action="/search" method="POST">
+                                        
+                                        <div class="form-group">                                          
+                                           <div class="col-sm-8 col-centered ">
+                                            <label for="od_kraj">Iz:</label>
+                                            <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhod">
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-group">                                          
+                                          <div class="col-sm-8 col-centered">
+                                           <label for="do_kraj">V:</label>          
+                                            <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="prihod">
+                                          </div>
+                                        </div>
+                                        
+    
+                                        <div class="form-group">
+                                                <div class="col-sm-8 col-centered">
+                                                  <label for="prosta_mesta">Stevilo potnikov:</label>  
+                                                  <select class="form-control" id="st_potnikov" name="st_potnikov">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                  </select>
+                                                </div>
+                                        </div>
+                                        
+                                        <div class="form-group">        
+                                            <div class="col-sm-offset-3 col-sm-6 "> 
+                                              <button type="submit" class="btn btn-default">Isci</button>
+                                            </div>
+                                         </div>
+
+                                  </form>  
+                                  
+                                  <form class="form-horizontal" action="/{{uporabnik}}" method="GET">
+                                  	<div>
+                                  		<button type="submit" class="btn btn-default">Nazaj 
+                                  		</button>
+                                  	</div>
+                                  </form>
+                                
+                             </h2>   
+  
+         </section>

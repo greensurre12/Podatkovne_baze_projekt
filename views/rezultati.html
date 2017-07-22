@@ -1,0 +1,44 @@
+%rebase('base.html')
+
+
+<form class="form-horizontal" action="/{{uporabnik}}" method="GET">
+    	<div>
+    		<button type="submit" class="btn btn-default">Nazaj</button>
+    	</div>
+    </form> 
+	%for rezultat in rezultat_iskanja:
+	<div class="row">
+		<div class="panel panel-primary col-sm-4"> 
+		  <div class="panel-body">
+		  	
+		  			<h5 style="color:black">Iz: {{rezultat[3]}}</h5>
+			    
+			    	<h5 style="color:black">V: {{rezultat[5]}}</h5>
+			    
+			    	<h5 style="color:black">Ob: {{rezultat[2]}}</h5>
+			    
+			    	<h5 style="color:black">Prostih mest: {{rezultat[6]}}</h5>
+			    
+			    	<h5 style="color:black">Objavil: {{rezultat[1]}}</h5>
+			    	
+			    	<form class="form-horizontal" action="/prijava/{{rezultat[0]}}&{{st_potnikov}}", method="POST">
+			    		<div>
+			    			<button type="submit" class="btn btn-default">Prijavi se</button>
+			    		</div>
+			    	</form>
+			  	
+			  	
+			  	
+		  </div>
+		</div>
+	</div>
+	%end
+
+    <form class="form-horizontal" action="/{{uporabnik}}" method="GET">
+    	<div>
+    		<button type="submit" class="btn btn-default">Nazaj</button>
+    	</div>
+    </form> 
+
+
+
