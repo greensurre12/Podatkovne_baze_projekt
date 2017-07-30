@@ -42,13 +42,12 @@ def prva_stran():
 
 @route('/signup', method= "POST")
 def signup():
-    """Registrira novega uporabnika. Preveri ce uporabnisko ime ze obstaja, ce se gesli ujemata, ce sta geslo, uporabnisko ime, telefon dovolj dolgi. Ce je vse ok, hashano geslo 
+    """Registrira novega uporabnika. Preveri ce uporabnisko ime ze obstaja, ce se gesli ujemata, ce sta geslo, uporabnisko ime dovolj dolgi. Ce je vse ok, hashano geslo 
     in podatke o uporabniku shrani v tabelo uporabnik v bazi. Nastavi piskotek in prikaze glavno stran."""
          
     uporabnisko_ime = bottle.request.forms.uporabnisko_ime 
     geslo = bottle.request.forms.geslo
     potrdi_geslo = bottle.request.forms.potrdi_geslo
-    telefon = bottle.request.forms.telefon
     email= bottle.request.forms.email
 
 
@@ -63,12 +62,11 @@ def signup():
         return bottle.template("index.html", napaka="Geslo naj ima vsaj 4 znake!")
     elif len(uporabnisko_ime)<4:
         return bottle.template("index.html", napaka="Uporabnisko ime naj ima vsaj 4 znake!")
-    elif len(telefon)==0:
-        return bottle.template("index.html", napaka="Telefon je obvezen!")
+
         
     else:
         geslo = funkcije.password_md5(geslo) 
-        cur.execute("INSERT INTO uporabnik (id, username, geslo, telefon,email) VALUES (DEFAULT, %s, %s, %s,%s)", (uporabnisko_ime, geslo, telefon,email))
+        cur.execute("INSERT INTO uporabnik (id, username, geslo, email) VALUES (DEFAULT, %s, %s, %s)", (uporabnisko_ime, geslo, email))
         bottle.response.set_cookie("account", value=uporabnisko_ime, secret=secret, path='/') 
         
         return redirect('/{0}'.format(uporabnisko_ime)) 
