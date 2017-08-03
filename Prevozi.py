@@ -112,9 +112,10 @@ def glavna_stran(uporabnik):
 	cookie = request.get_cookie('account', secret=secret)
 
 	if str(cookie) == uporabnik:
-		cur.execute("SELECT * FROM(SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki WHERE narocnik = %s",[uporabnik])
+		cur.execute("SELECT * FROM ((SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki JOIN uporabnik ON neki.narocnik = uporabnik.id) AS neki2 WHERE username = %s",[uporabnik])
 		moji_prevozi = cur.fetchall()
-		cur.execute("SELECT * FROM prevoz WHERE objavil = %s", [uporabnik])
+
+		cur.execute("SELECT * FROM (prevoz INNER JOIN uporabnik ON prevoz.objavil = uporabnik.id) WHERE username = %s", [uporabnik])
 		objavljeni_prevozi = cur.fetchall()
 		return bottle.template("uporabnik.html", sporocilo="", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi = moji_prevozi, objavljeni_prevozi=objavljeni_prevozi)
 	else:
@@ -138,14 +139,24 @@ def glavna_stran(uporabnik):
 	if cur.rowcount == 0:
 		return bottle.template("uporabnik.html", sporocilo="Koncni kraj ne obstaja!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
 
-	if zacetek < datetime.now():
-		return bottle.template("uporabnik.html", sporocilo="Objava prevozov za nazaj ni mogoca!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
+	#if zacetek < datetime.now():
+	#	return bottle.template("uporabnik.html", sporocilo="Objava prevozov za nazaj ni mogoca!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
 	
 	else:
-		id = cur.execute("SELECT id FROM uporabnik WHERE username=%s", [uporabnik])
-		cur.execute("INSERT INTO prevoz (id,objavil,  zacetek,zacetni_kraj,konec,koncni_kraj,prosta_mesta) VALUES (DEFAULT,%s,%s,%s,%s,%s,%s)",(uporabnik,zacetek,zacetni_kraj,konec,koncni_kraj,prosta_mesta)) 
+		objavil1 = cur.execute("SELECT id FROM uporabnik WHERE username=%s", [uporabnik])
+		zacetni_kraj1 = cur.execute("SELECT id FROM kraj WHERE ime=%s",[zacetni_kraj])
+		koncni_kraj1 = cur.execute("SELECT id FROM kraj WHERE ime=%s",[koncni_kraj])
 
-		return bottle.template ("uporabnik.html", sporocilo="Uspesno si objavil prevoz!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))                              
+		cur.execute("INSERT INTO prevoz (id, objavil, zacetek, zacetni_kraj, konec, koncni_kraj, prosta_mesta) VALUES (DEFAULT,%s,%s,%s,%s,%s,%s)",(objavil1,zacetek,zacetni_kraj1,konec,koncni_kraj1,prosta_mesta)) 
+		
+		#cur.execute("SELECT zacetek, ime, konec, ime2, prosta_mesta FROM ((prevoz JOIN uporabnik ON prevoz.objavil = uporabnik.id JOIN kraj ON prevoz.zacetni_kraj = kraj.id) AS neki JOIN (SELECT id, ime AS ime2 FROM kraj) AS neki2 ON neki.koncni_kraj = neki2.id) AS neki3")
+		
+		cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek FROM (((SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki JOIN uporabnik ON neki.narocnik = uporabnik.id) AS neki2 JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki3 ON neki2.zacetni_kraj = neki3.id) AS neki4 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki5 ON neki4.koncni_kraj = neki5.id WHERE username =  %s",[uporabnik])
+		moji_prevozi = cur.fetchall()
+
+		cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta FROM (((prevoz JOIN uporabnik ON prevoz.objavil = uporabnik.id) AS neki JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki2 ON neki.zacetni_kraj = neki2.id)AS neki4 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki5 ON neki4.koncni_kraj = neki5.id) AS neki6 WHERE username =  %s", [uporabnik])
+		objavljeni_prevozi = cur.fetchall()
+		return bottle.template ("uporabnik.html", sporocilo="Uspesno si objavil prevoz!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi = moji_prevozi, objavljeni_prevozi=objavljeni_prevozi)                            
 
 
 
@@ -159,7 +170,7 @@ def isci():
 	cur.execute("SELECT 1 FROM uporabnik WHERE username = %s", [uporabnik])
 
 	if cur.rowcount == 0:
-		return redirect("index.html", napaka=False) 
+		return redirect("/") 
 
 	else:
 		return bottle.template("iskanje.html", zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), uporabnik=uporabnik)
@@ -179,7 +190,7 @@ def isci():
 	if prihod == None:
 		prihod = ""
 
-	cur.execute("SELECT * FROM prevoz WHERE prosta_mesta >= %s AND zacetni_kraj ILIKE %s AND koncni_kraj ILIKE %s ", [st_potnikov, odhod, prihod])
+	cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta, username, id1 FROM (((SELECT id AS id1, zacetek, konec, prosta_mesta, objavil, zacetni_kraj, koncni_kraj FROM prevoz) AS prevoz JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki ON prevoz.zacetni_kraj = neki.id) AS neki2 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki3 ON neki2.koncni_kraj = neki3.id) AS neki4 JOIN uporabnik ON neki4.objavil = uporabnik.id WHERE  prosta_mesta >= %s AND zacetni_kraj1 ILIKE %s AND koncni_kraj1 ILIKE %s ", [st_potnikov, odhod, prihod])
     
 	rezultat_iskanja = cur.fetchall() #type() = tuple
 
@@ -192,8 +203,9 @@ def isci():
 def prijava(id_prevoza, st_potnikov):
 	"""Obdela prijavo na prevoz, hkrati odsteje prijavljena mesta od prostih mest v prevozu. Vrne se na glavno stran."""
 	uporabnik = str(request.get_cookie('account', secret=secret))
+	id_uporabnika = cur.execute("SELECT id FROM uporabnik WHERE username = %s",(uporabnik))
 	
-	cur.execute("INSERT INTO narocanje(narocnik, prevoz, mesta) VALUES (%s, %s, %s)",(uporabnik, id_prevoza, st_potnikov))
+	cur.execute("INSERT INTO narocanje(id, narocnik, prevoz, mesta) VALUES (DEFAULT, %s, %s, %s)",(id_uporabnika, id_prevoza, st_potnikov))
 	cur.execute("UPDATE prevoz SET prosta_mesta = prosta_mesta-%s WHERE id = %s", (st_potnikov, id_prevoza))
 
 	return redirect("/{0}".format(uporabnik))
