@@ -118,7 +118,7 @@ def glavna_stran(uporabnik):
 	"""Daljsi SELECT ukazi so vsi napisani na isti nacin: osnovni tabeli se z JOIN pridruzuje ostale preko id-jev, ki v vseh tabelah v bazi nastopajo kot FOREIGN KEY. Izgleda, da je ob vsakem
 	novem JOIN potrebno vse skupaj poimenovati, 'neki[x]' so placeholder imena za te tabele."""
 	if str(cookie) == uporabnik:
-		cur.execute("""SELECT zacetni_kraj1, koncni_kraj1, zacetek 
+		cur.execute("""SELECT zacetni_kraj1, koncni_kraj1, zacetek, email 
 			FROM ((((SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz 
 			INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki JOIN uporabnik ON neki.narocnik = uporabnik.id) AS neki2 
 			JOIN (SELECT id AS koncni_id, ime AS koncni_kraj1 FROM kraj) AS neki3 ON neki2.koncni_kraj = neki3.koncni_id) AS neki4 
@@ -200,7 +200,7 @@ def isci():
 	if prihod == None:
 		prihod = ""
 
-	cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta, username, id1 FROM (((SELECT id AS id1, zacetek, konec, prosta_mesta, objavil, zacetni_kraj, koncni_kraj FROM prevoz) AS prevoz JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki ON prevoz.zacetni_kraj = neki.id) AS neki2 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki3 ON neki2.koncni_kraj = neki3.id) AS neki4 JOIN uporabnik ON neki4.objavil = uporabnik.id WHERE  prosta_mesta >= %s AND zacetni_kraj1 ILIKE %s AND koncni_kraj1 ILIKE %s ", [st_potnikov, odhod, prihod])
+	cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta, username, id1, email FROM (((SELECT id AS id1, zacetek, konec, prosta_mesta, objavil, zacetni_kraj, koncni_kraj FROM prevoz) AS prevoz JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki ON prevoz.zacetni_kraj = neki.id) AS neki2 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki3 ON neki2.koncni_kraj = neki3.id) AS neki4 JOIN uporabnik ON neki4.objavil = uporabnik.id WHERE  prosta_mesta >= %s AND zacetni_kraj1 ILIKE %s AND koncni_kraj1 ILIKE %s ", [st_potnikov, odhod, prihod])
     
 	rezultat_iskanja = cur.fetchall() #type() = tuple
 
