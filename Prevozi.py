@@ -153,23 +153,31 @@ def glavna_stran(uporabnik):
 	else:
 		cur.execute("SELECT id FROM uporabnik WHERE username=%s", [uporabnik])
 		objavil1 = cur.fetchone()[0]
-		cur.execute("SELECT id FROM kraj WHERE ime=%s",[zacetni_kraj])
+		cur.execute("SELECT id FROM kraj WHERE ime=%s", [zacetni_kraj])
 		zacetni_kraj1 = cur.fetchone()[0]
-		cur.execute("SELECT id FROM kraj WHERE ime=%s",[koncni_kraj])
+		cur.execute("SELECT id FROM kraj WHERE ime=%s", [koncni_kraj])
 		koncni_kraj1 = cur.fetchone()[0]
 
-		cur.execute("INSERT INTO prevoz (id, objavil, zacetek, zacetni_kraj, konec, koncni_kraj, prosta_mesta) VALUES (DEFAULT,%s,%s,%s,%s,%s,%s)",(objavil1,zacetek,zacetni_kraj1,konec,koncni_kraj1,prosta_mesta)) 
-				
-		cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek FROM (((SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki JOIN uporabnik ON neki.narocnik = uporabnik.id) AS neki2 JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki3 ON neki2.zacetni_kraj = neki3.id) AS neki4 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki5 ON neki4.koncni_kraj = neki5.id WHERE username =  %s",[uporabnik])
+		cur.execute(
+			"INSERT INTO prevoz (id, objavil, zacetek, zacetni_kraj, konec, koncni_kraj, prosta_mesta) VALUES (DEFAULT,%s,%s,%s,%s,%s,%s)",
+			(objavil1, zacetek, zacetni_kraj1, konec, koncni_kraj1, prosta_mesta))
+
+		cur.execute(
+			"SELECT zacetni_kraj1, koncni_kraj1, zacetek FROM (((SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki JOIN uporabnik ON neki.narocnik = uporabnik.id) AS neki2 JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki3 ON neki2.zacetni_kraj = neki3.id) AS neki4 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki5 ON neki4.koncni_kraj = neki5.id WHERE username =  %s",
+			[uporabnik])
 		moji_prevozi = cur.fetchall()
 
-		cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta FROM (((prevoz JOIN uporabnik ON prevoz.objavil = uporabnik.id) AS neki JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki2 ON neki.zacetni_kraj = neki2.id)AS neki4 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki5 ON neki4.koncni_kraj = neki5.id) AS neki6 WHERE username =  %s", [uporabnik])
+		cur.execute(
+			"SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta FROM (((prevoz JOIN uporabnik ON prevoz.objavil = uporabnik.id) AS neki JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki2 ON neki.zacetni_kraj = neki2.id)AS neki4 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki5 ON neki4.koncni_kraj = neki5.id) AS neki6 WHERE username =  %s",
+			[uporabnik])
 		objavljeni_prevozi = cur.fetchall()
-		return bottle.template ("uporabnik.html", sporocilo="Uspesno si objavil prevoz!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi = moji_prevozi, objavljeni_prevozi=objavljeni_prevozi)                            
+		return bottle.template("uporabnik.html", sporocilo="Uspesno si objavil prevoz!", uporabnik=uporabnik,
+							   zdaj=datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi=moji_prevozi,
+							   objavljeni_prevozi=objavljeni_prevozi)
 
 
 
-########################################################################################    
+	########################################################################################
 """SEARCH"""
 
 @route("/search", method = "GET")

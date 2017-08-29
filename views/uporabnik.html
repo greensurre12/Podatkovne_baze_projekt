@@ -12,10 +12,7 @@
                               <h6 class="wow fadeInUp animated" data-wow-delay=".1s" >
                                      Pozdravljen {{uporabnik}}!
                                 </h6>
-                                <h6 class="wow fadeInUp animated" data-wow-delay=".1s" >
-                                     {{sporocilo}}
-                                </h6>
-                                
+
                                 <div class="row" >
                                   <div class="col-sm-4">
                                   </div>
@@ -71,7 +68,7 @@
                                         
                                           <h5 style="color:black">Ob: {{i[2]}}</h5>
 
-                                          <h5 style="color:black">Kontakt: {{i[3]}}</h5>
+                                          <h5 style="color:black">Kontakt: {{i[-1]}}</h5>
                                         
                                     </div>
                                     </div>
@@ -162,7 +159,11 @@
                                          </div>
                                          
                               
-                                  </form>    
+                                  </form>
+                                            <h3 style="color:red;" class="wow fadeInUp animated" data-wow-delay=".1s" >
+                                     {{sporocilo}}
+                                </h3>
+                                
                                 </h4> 
                                                     
                             </div>
@@ -172,10 +173,12 @@
 
                         </div>
                         </div>
+
                     </div>
                        
                 </div>
             </div class ="row">
+
             <div>
             <div class ="row">
             </div>
