@@ -126,6 +126,9 @@ def glavna_stran(uporabnik):
 			WHERE username = %s""",[uporabnik])
 		moji_prevozi = cur.fetchall()
 
+		print(moji_prevozi[0])
+		print(len(moji_prevozi[0]))
+
 		cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta FROM (((prevoz INNER JOIN uporabnik ON prevoz.objavil = uporabnik.id) AS neki1 JOIN (SELECT id AS koncni_id, ime AS koncni_kraj1 FROM kraj) AS neki2 ON neki1.koncni_kraj = neki2.koncni_id) AS neki3 JOIN (SELECT id AS zacetni_id, ime AS zacetni_kraj1 FROM kraj) AS neki4 ON neki4.zacetni_id = neki3.zacetni_kraj) WHERE username = %s", [uporabnik])
 		objavljeni_prevozi = cur.fetchall()
 		return bottle.template("uporabnik.html", sporocilo="", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi = moji_prevozi, objavljeni_prevozi=objavljeni_prevozi)
@@ -141,6 +144,17 @@ def glavna_stran(uporabnik):
 	konec = bottle.request.forms.konec
 	prosta_mesta = bottle.request.forms.prosta_mesta
 	uporabnik =  str(request.get_cookie('account', secret=secret))
+
+	cur.execute("""SELECT zacetni_kraj1, koncni_kraj1, zacetek, email 
+			FROM ((((SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz 
+			INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki JOIN uporabnik ON neki.narocnik = uporabnik.id) AS neki2 
+			JOIN (SELECT id AS koncni_id, ime AS koncni_kraj1 FROM kraj) AS neki3 ON neki2.koncni_kraj = neki3.koncni_id) AS neki4 
+			JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki5 ON neki4.zacetni_kraj = neki5.id) AS neki6 
+			WHERE username = %s""",[uporabnik])
+	moji_prevozi = cur.fetchall()
+
+	cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta FROM (((prevoz INNER JOIN uporabnik ON prevoz.objavil = uporabnik.id) AS neki1 JOIN (SELECT id AS koncni_id, ime AS koncni_kraj1 FROM kraj) AS neki2 ON neki1.koncni_kraj = neki2.koncni_id) AS neki3 JOIN (SELECT id AS zacetni_id, ime AS zacetni_kraj1 FROM kraj) AS neki4 ON neki4.zacetni_id = neki3.zacetni_kraj) WHERE username = %s", [uporabnik])
+	objavljeni_prevozi = cur.fetchall()
 
 	cur.execute("SELECT 1 FROM kraj WHERE ime = %s", [zacetni_kraj])
 	if cur.rowcount == 0:
