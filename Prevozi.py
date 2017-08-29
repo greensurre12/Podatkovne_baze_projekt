@@ -149,7 +149,7 @@ def glavna_stran(uporabnik):
 				JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki5 ON neki4.zacetni_kraj = neki5.id) AS neki6 
 				WHERE username = %s AND zacetek >=%s""", [uporabnik, datetime.now().strftime('%Y-%m-%dT%H:%M')])
 	moji_prevozi = cur.fetchall()
-	
+
 
 	cur.execute(
 		"SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta FROM (((prevoz INNER JOIN uporabnik ON prevoz.objavil = uporabnik.id) AS neki1 JOIN (SELECT id AS koncni_id, ime AS koncni_kraj1 FROM kraj) AS neki2 ON neki1.koncni_kraj = neki2.koncni_id) AS neki3 JOIN (SELECT id AS zacetni_id, ime AS zacetni_kraj1 FROM kraj) AS neki4 ON neki4.zacetni_id = neki3.zacetni_kraj) WHERE username = %s AND zacetek >=%s",
