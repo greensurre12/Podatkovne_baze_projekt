@@ -20,7 +20,7 @@
                                                    % if napaka1:
                                                       <div class="col-sm-8 has-error col-centered">
                                                        <label for="od_kraj">Iz:</label>
-                                            <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhod">
+                                            <input type="text" class="form-control" id="od_kraj" required="True" placeholder="Odhodni kraj" name="odhod">
                             <small style="color:red !important;">*{{napaka1}}</small>
                                                       </div>
                                                    % end
@@ -28,7 +28,7 @@
                                                %if not defined('napaka1'):
                                                       <div class="col-sm-8 col-centered">
                                                         <label for="od_kraj">Iz:</label>
-                                            <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhod">
+                                            <input type="text" class="form-control" id="od_kraj" required="True" placeholder="Odhodni kraj" name="odhod">
                                                       </div>
                                                %end
                                         </div>
@@ -39,7 +39,7 @@
                                                    % if napaka2:
                                                       <div class="col-sm-8 has-error col-centered">
                                                          <label for="do_kraj">V:</label>
-                                            <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="prihod">
+                                            <input type="text" class="form-control" id="do_kraj"  required="True" placeholder="Dohodni kraj" name="prihod">
                             <small style="color:red !important;">*{{napaka2}}</small>
                                                       </div>
                                                    % end
@@ -47,7 +47,7 @@
                                                %if not defined('napaka2'):
                                                       <div class="col-sm-8 col-centered">
                                                         <label for="do_kraj">V:</label>
-                                            <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="prihod">
+                                            <input type="text" class="form-control" id="do_kraj" required="True" placeholder="Dohodni kraj" name="prihod">
                                                       </div>
                                                %end
                                         </div>

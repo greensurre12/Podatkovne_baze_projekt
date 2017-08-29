@@ -124,14 +124,14 @@
                                        %if defined('napaka2'):
                                                    % if napaka2:
                                                       <div class="col-sm-8 has-error">
-                                                        <input type="text" class="form-control" id="uporabnisko" placeholder="Uporabniško ime" name="uporabnisko_ime">
+                                                        <input type="text" class="form-control" id="uporabnisko" required="True" placeholder="Uporabniško ime" required="True" name="uporabnisko_ime">
                             <p class="help-block" style="color:red !important;"><small>*{{napaka2}}</small></p>
                                                       </div>
                                                    % end
                                                 %end
                                                %if not defined('napaka2'):
                                                       <div class="col-sm-8 ">
-                                                        <input type="text" class="form-control" id="uporabnisko" placeholder="Uporabniško ime" name="uporabnisko_ime">
+                                                        <input type="text" class="form-control" id="uporabnisko" required="True" placeholder="Uporabniško ime" required="True" name="uporabnisko_ime">
                                                       </div>
                                                %end
                  </div>
@@ -139,7 +139,7 @@
                                         <div class="form-group">
                                           
                                           <div class="col-sm-8">          
-                                            <input type="password" class="form-control" id="pwd" placeholder="Geslo" name="geslo">
+                                            <input type="password" class="form-control" id="pwd" required="True" placeholder="Geslo" name="geslo">
                                           </div>
                                         </div>
                                         <div class="form-group">
@@ -148,14 +148,14 @@
                                             %if defined('napaka3'):
                                                    % if napaka3:
                                                       <div class="col-sm-8 has-error">
-                                                        <input type="password" class="form-control" id="pwd2" placeholder="Potrdi geslo" name="potrdi_geslo">
+                                                        <input type="password" class="form-control" id="pwd2" placeholder="Potrdi geslo" required="True" name="potrdi_geslo">
                             <p class="help-block" style="color:red !important;"><small>*{{napaka3}}</small></p>
                                                       </div>
                                                    % end
                                                 %end
                                                %if not defined('napaka3'):
                                                       <div class="col-sm-8 ">
-                                                        <input type="password" class="form-control" id="pwd2" placeholder="Potrdi geslo" name="potrdi_geslo">
+                                                        <input type="password" class="form-control" id="pwd2" placeholder="Potrdi geslo" required="True" name="potrdi_geslo">
                                                                                                              </div>
                                                %end
                                         </div>
@@ -165,7 +165,7 @@
                                          <div class="form-group">
                                           
                                           <div class="col-sm-8">          
-                                            <input type="email" class="form-control" id="email" placeholder="E-mail" name="email">
+                                            <input type="email" class="form-control" id="email" required="True" placeholder="E-mail" name="email">
                                           </div>
                                         </div>
                                         <div class="form-group">        
