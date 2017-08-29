@@ -141,7 +141,7 @@ def glavna_stran(uporabnik):
 	konec = bottle.request.forms.konec
 	prosta_mesta = bottle.request.forms.prosta_mesta
 	uporabnik =  str(request.get_cookie('account', secret=secret))
-	cookie = request.get_cookie('account', secret=secret)
+
 
 	cur.execute("""SELECT zacetni_kraj1, koncni_kraj1, zacetek, email 
 		FROM ((((SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz 
