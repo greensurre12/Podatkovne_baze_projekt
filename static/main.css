@@ -3,6 +3,7 @@
 @import url(http://fonts.googleapis.com/css?family=Glegoo);
 body {
   font-family: 'Roboto', sans-serif;
+
 }
 h1,
 h2,
@@ -139,6 +140,16 @@ a:hover {
   visibility: hidden;
   opacity: 0;
 }
+#wrap {
+
+  min-height: 100%;
+
+}
+#main {
+  overflow:auto;
+    padding-top:15px;
+  padding-bottom:200px; /* this needs to be bigger than footer height*/
+}
 #hero-area {
   background: url('images/background.jpg') no-repeat 50%;
   background-size: cover;
@@ -147,6 +158,8 @@ a:hover {
   color: #fff;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
   position: relative;
+  padding-bottom:330px;
+  height:100%;
 }
 #hero-area .top{
     margin-top:20px;

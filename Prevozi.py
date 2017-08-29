@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 import bottle
 from bottle import *
 import hashlib
@@ -43,9 +43,9 @@ def prva_stran():
 
 @route('/signup', method= "POST")
 def signup():
-    """Registrira novega uporabnika. Preveri ce uporabnisko ime ze obstaja, ce se gesli ujemata, ce sta geslo, uporabnisko ime dovolj dolgi. Ce je vse ok, hashano geslo 
+    """Registrira novega uporabnika. Preveri ce uporabnisko ime ze obstaja, ce se gesli ujemata, ce sta geslo, uporabnisko ime dovolj dolgi. Ce je vse ok, hashano geslo
     in podatke o uporabniku shrani v tabelo 'uporabnik' v bazi. Nastavi piskotek in prikaze glavno stran."""
-         
+
     uporabnisko_ime = bottle.request.forms.uporabnisko_ime 
     geslo = bottle.request.forms.geslo
     potrdi_geslo = bottle.request.forms.potrdi_geslo
@@ -54,23 +54,23 @@ def signup():
 
     cur.execute("SELECT 1 FROM uporabnik WHERE username=%s", [uporabnisko_ime])
 
-    if cur.rowcount != 0: 
-        return bottle.template("index.html", napaka="To uporabnisko ime že obstaja!")
-            
-    elif geslo != potrdi_geslo:
-        return bottle.template("index.html", napaka="Gesli se ne ujemata!")
-    elif len(geslo)<4: 
-        return bottle.template("index.html", napaka="Geslo naj ima vsaj 4 znake!")
-    elif len(uporabnisko_ime)<4:
-        return bottle.template("index.html", napaka="Uporabnisko ime naj ima vsaj 4 znake!")
+    if cur.rowcount != 0:
+        return bottle.template("index.html", napaka2="To uporabnisko ime že obstaja!", scroll = "reg")
 
-        
+    elif geslo != potrdi_geslo:
+        return bottle.template("index.html", napaka3="Gesli se ne ujemata!", scroll = "reg")
+    elif len(geslo)<4:
+        return bottle.template("index.html", napaka4="Geslo naj ima vsaj 4 znake!",scroll = "reg")
+    elif len(uporabnisko_ime)<4:
+        return bottle.template("index.html", napaka5="Uporabnisko ime naj ima vsaj 4 znake!",scroll = "reg")
+
+
     else:
-        geslo = funkcije.password_md5(geslo) 
+        geslo = funkcije.password_md5(geslo)
         cur.execute("INSERT INTO uporabnik (id, username, geslo, email) VALUES (DEFAULT, %s, %s, %s)", (uporabnisko_ime, geslo, email))
-        bottle.response.set_cookie("account", value=uporabnisko_ime, secret=secret, path='/') 
+        bottle.response.set_cookie("account", value=uporabnisko_ime, secret=secret, path='/')
         
-        return redirect('/{0}'.format(uporabnisko_ime)) 
+        return redirect('/{0}'.format(uporabnisko_ime))
 
 ########################################################################################        
 """LOGIN"""
@@ -84,8 +84,8 @@ def login():
 	geslo = funkcije.password_md5(bottle.request.forms.geslo)
 	cur.execute("SELECT 1 FROM uporabnik WHERE username=%s AND geslo=%s",[uporabnisko_ime, geslo])
 
-	if cur.rowcount == 0: 
-		return bottle.template("index.html", napaka="Napacno uporabnisko ime ali geslo!")
+	if cur.rowcount == 0:
+		return bottle.template("index.html", napaka0="Napacno uporabnisko ime ali geslo!")
 
 	else:
 		bottle.response.set_cookie('account', value=uporabnisko_ime, secret=secret, path='/')
@@ -203,8 +203,10 @@ def isci():
 	cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta, username, id1, email FROM (((SELECT id AS id1, zacetek, konec, prosta_mesta, objavil, zacetni_kraj, koncni_kraj FROM prevoz) AS prevoz JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki ON prevoz.zacetni_kraj = neki.id) AS neki2 JOIN (SELECT id, ime AS koncni_kraj1 FROM kraj) AS neki3 ON neki2.koncni_kraj = neki3.id) AS neki4 JOIN uporabnik ON neki4.objavil = uporabnik.id WHERE  prosta_mesta >= %s AND zacetni_kraj1 ILIKE %s AND koncni_kraj1 ILIKE %s ", [st_potnikov, odhod, prihod])
     
 	rezultat_iskanja = cur.fetchall() #type() = tuple
-
-	return bottle.template("rezultati.html",zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), rezultat_iskanja=rezultat_iskanja, uporabnik=uporabnik, st_potnikov=st_potnikov)
+	prazen = ''
+	if len(rezultat_iskanja) == 0:
+		prazen = 'Tak prevoz ni objavljen'
+	return bottle.template("rezultati.html",zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'), prazen = prazen , rezultat_iskanja=rezultat_iskanja, uporabnik=uporabnik, st_potnikov=st_potnikov)
  
 ########################################################################################    
 """PRIJAVA"""
