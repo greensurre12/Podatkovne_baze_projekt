@@ -141,14 +141,46 @@ def glavna_stran(uporabnik):
 	konec = bottle.request.forms.konec
 	prosta_mesta = bottle.request.forms.prosta_mesta
 	uporabnik =  str(request.get_cookie('account', secret=secret))
+	cookie = request.get_cookie('account', secret=secret)
+	if str(cookie) == uporabnik:
+		cur.execute("""SELECT zacetni_kraj1, koncni_kraj1, zacetek, email 
+			FROM ((((SELECT zacetni_kraj, koncni_kraj, zacetek, narocnik FROM prevoz 
+			INNER JOIN narocanje ON narocanje.prevoz = prevoz.id) AS neki JOIN uporabnik ON neki.narocnik = uporabnik.id) AS neki2 
+			JOIN (SELECT id AS koncni_id, ime AS koncni_kraj1 FROM kraj) AS neki3 ON neki2.koncni_kraj = neki3.koncni_id) AS neki4 
+			JOIN (SELECT id, ime AS zacetni_kraj1 FROM kraj) AS neki5 ON neki4.zacetni_kraj = neki5.id) AS neki6 
+			WHERE username = %s""",[uporabnik])
+		moji_prevozi = cur.fetchall()
 
-	cur.execute("SELECT 1 FROM kraj WHERE ime = %s", [zacetni_kraj])
-	if cur.rowcount == 0:
-		return bottle.template("uporabnik.html", sporocilo="Zacetni kraj ne obstaja!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
+		cur.execute("SELECT zacetni_kraj1, koncni_kraj1, zacetek, prosta_mesta FROM (((prevoz INNER JOIN uporabnik ON prevoz.objavil = uporabnik.id) AS neki1 JOIN (SELECT id AS koncni_id, ime AS koncni_kraj1 FROM kraj) AS neki2 ON neki1.koncni_kraj = neki2.koncni_id) AS neki3 JOIN (SELECT id AS zacetni_id, ime AS zacetni_kraj1 FROM kraj) AS neki4 ON neki4.zacetni_id = neki3.zacetni_kraj) WHERE username = %s", [uporabnik])
+		objavljeni_prevozi = cur.fetchall()
+		'''POGLEDAMO ČE JE KRAJ OK!'''
 
-	cur.execute("SELECT 1 FROM kraj WHERE ime = %s", [koncni_kraj])
-	if cur.rowcount == 0:
-		return bottle.template("uporabnik.html", sporocilo="Koncni kraj ne obstaja!", uporabnik=uporabnik, zdaj = datetime.now().strftime('%Y-%m-%dT%H:%M'))
+
+		cur.execute("SELECT 1 FROM kraj WHERE ime=%s", [zacetni_kraj])
+		if cur.rowcount == 0:
+			cur.execute("SELECT 1 FROM kraj WHERE ime=%s", [koncni_kraj])
+			if cur.rowcount == 0:
+				return bottle.template("uporabnik.html", sporocilo="", uporabnik=uporabnik,
+									   zdaj=datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi=moji_prevozi,
+									   objavljeni_prevozi=objavljeni_prevozi,
+									   napaka1=" %s ne obstaja " % (zacetni_kraj),
+									   napaka2="%s ne obstaja " % (koncni_kraj), napaka='Napaka v objavi')
+			else:
+				return bottle.template("uporabnik.html", sporocilo="", uporabnik=uporabnik,
+									   zdaj=datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi=moji_prevozi,
+									   objavljeni_prevozi=objavljeni_prevozi,
+									   napaka1=" %s ne obstaja " % (zacetni_kraj),napaka='Napaka v objavi')
+		cur.execute("SELECT 1 FROM kraj WHERE ime=%s", [koncni_kraj])
+		if cur.rowcount == 0:
+			return bottle.template("uporabnik.html", sporocilo="", uporabnik=uporabnik,
+									   zdaj=datetime.now().strftime('%Y-%m-%dT%H:%M'), moji_prevozi=moji_prevozi,
+									   objavljeni_prevozi=objavljeni_prevozi,
+									   napaka1=" %s ne obstaja " % (koncni_kraj), napaka='Napaka v objavi')
+
+
+
+
+
 
 	else:
 		cur.execute("SELECT id FROM uporabnik WHERE username=%s", [uporabnik])
@@ -202,6 +234,21 @@ def isci():
 	prihod = bottle.request.forms.prihod
 	st_potnikov = bottle.request.forms.st_potnikov
 
+	cur.execute("SELECT 1 FROM kraj WHERE ime=%s", [odhod])
+	if cur.rowcount == 0:
+		cur.execute("SELECT 1 FROM kraj WHERE ime=%s", [prihod])
+		if cur.rowcount == 0:
+
+			return bottle.template("iskanje.html", zdaj=datetime.now().strftime('%Y-%m-%dT%H:%M'), uporabnik=uporabnik,
+								   napaka1=" %s ne obstaja " % (odhod),
+								   napaka2="%s ne obstaja " % (prihod))
+		else:
+			return bottle.template("iskanje.html", zdaj=datetime.now().strftime('%Y-%m-%dT%H:%M'), uporabnik=uporabnik,
+								   napaka1=" %s ne obstaja " % (odhod))
+	cur.execute("SELECT 1 FROM kraj WHERE ime=%s", [prihod])
+	if cur.rowcount == 0:
+		return bottle.template("iskanje.html", zdaj=datetime.now().strftime('%Y-%m-%dT%H:%M'), uporabnik=uporabnik,
+							   napaka2="%s ne obstaja " % (prihod))
 
 	if odhod == None:
 		odhod = ""

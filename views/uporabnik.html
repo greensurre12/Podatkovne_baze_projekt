@@ -1,6 +1,14 @@
 
 %rebase('base.html')
 
+<script type="text/javascript">
+     function updatedate() {
+    var firstdate = document.getElementById("datetime").value;
+    document.getElementById("datetime1").value = "";
+    document.getElementById("datetime1").setAttribute("min",firstdate);
+    document.getElementById("datetime1").setAttribute("value",firstdate);
+  }
+  </script>
 
         <section id="hero-area" >
             <div class="container top3">
@@ -12,6 +20,16 @@
                               <h6 class="wow fadeInUp animated" data-wow-delay=".1s" >
                                      Pozdravljen {{uporabnik}}!
                                 </h6>
+                             %if defined('napaka'):
+                                                   % if napaka:
+
+                            <script type="text/javascript">
+             $(window).on('load',function(){
+        $('#objavi').collapse('show');
+    });
+        </script>
+                            %end
+                            %end
 
                                 <div class="row" >
                                   <div class="col-sm-4">
@@ -111,22 +129,51 @@
                                         
                                         <div class="form-group">                                          
                                            <div class="col-sm-8 col-centered ">
-                                            <label for="od_kraj">Od:</label>
+
+
+                                                %if defined('napaka1'):
+                                                   % if napaka1:
+                                                      <div class="col-sm-8 has-error col-centered">
+                                                         <label for="od_kraj">Od:</label>
                                             <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="zacetni_kraj">
+                            <small style="color:red !important;">*{{napaka1}}</small>
+                                                      </div>
+                                                   % end
+                                                %end
+                                               %if not defined('napaka1'):
+                                                      <div class="col-sm-8 col-centered">
+                                                        <label for="od_kraj">Od:</label>
+                                            <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="zacetni_kraj">
+                                                      </div>
+                                               %end
                                           </div>
                                         </div>
                                         
                                         <div class="form-group">                                          
                                           <div class="col-sm-8 col-centered">
-                                           <label for="do_kraj">Do:</label>          
+
+                                         %if defined('napaka2'):
+                                                   % if napaka2:
+                                                      <div class="col-sm-8 has-error col-centered">
+                                                       <label for="do_kraj">Do:</label>
                                             <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="koncni_kraj">
+                            <small style="color:red !important;">*{{napaka2}}</small>
+                                                      </div>
+                                                   % end
+                                                %end
+                                               %if not defined('napaka2'):
+                                                      <div class="col-sm-8 col-centered">
+                                                        <label for="do_kraj">Do:</label>
+                                            <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="koncni_kraj">
+                                                      </div>
+                                               %end
                                           </div>
                                         </div>
                                         
                                         <div class="form-group">
                                           <div class="col-sm-8 col-centered">
                                                      <label for="datetime">Čas odhoda:</label> <br>          
-                                                    <input type ="datetime-local" min="{{zdaj}}" value ="{{zdaj}}" name="zacetek" id = "datetime" onkeyup='saveValue(this);'> 
+                                                    <input type ="datetime-local" min="{{zdaj}}" value ="{{zdaj}}"   onchange="updatedate();" name="zacetek" id = "datetime">
                                              
                                               </div>
                                         </div>
@@ -134,7 +181,7 @@
                                         <div class="form-group">
                                           <div class="col-sm-8 col-centered">
                                                      <label for="datetime1">Čas dohoda:</label><br>        
-                                                    <input type ="datetime-local" min="{{zdaj}}" value ="{{zdaj}}" name="konec" id = "datetime1" onkeyup='saveValue(this);'> 
+                                                    <input type ="datetime-local"   min="{{zdaj}}" value ="{{zdaj}}" name="konec" id = "datetime1" >
                                               </div>
                                         </div>
                                         
@@ -163,7 +210,7 @@
                                             <h3 style="color:red;" class="wow fadeInUp animated" data-wow-delay=".1s" >
                                      {{sporocilo}}
                                 </h3>
-                                
+
                                 </h4> 
                                                     
                             </div>

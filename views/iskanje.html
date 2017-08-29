@@ -14,17 +14,42 @@
 								<form class="form-horizontal " action="/search" method="POST">
                                         
                                         <div class="form-group">                                          
-                                           <div class="col-sm-8 col-centered ">
-                                            <label for="od_kraj">Iz:</label>
+
+
+                                              %if defined('napaka1'):
+                                                   % if napaka1:
+                                                      <div class="col-sm-8 has-error col-centered">
+                                                       <label for="od_kraj">Iz:</label>
                                             <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhod">
-                                          </div>
+                            <small style="color:red !important;">*{{napaka1}}</small>
+                                                      </div>
+                                                   % end
+                                                %end
+                                               %if not defined('napaka1'):
+                                                      <div class="col-sm-8 col-centered">
+                                                        <label for="od_kraj">Iz:</label>
+                                            <input type="text" class="form-control" id="od_kraj" placeholder="Odhodni kraj" name="odhod">
+                                                      </div>
+                                               %end
                                         </div>
                                         
                                         <div class="form-group">                                          
-                                          <div class="col-sm-8 col-centered">
-                                           <label for="do_kraj">V:</label>          
+
+                                            %if defined('napaka2'):
+                                                   % if napaka2:
+                                                      <div class="col-sm-8 has-error col-centered">
+                                                         <label for="do_kraj">V:</label>
                                             <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="prihod">
-                                          </div>
+                            <small style="color:red !important;">*{{napaka2}}</small>
+                                                      </div>
+                                                   % end
+                                                %end
+                                               %if not defined('napaka2'):
+                                                      <div class="col-sm-8 col-centered">
+                                                        <label for="do_kraj">V:</label>
+                                            <input type="text" class="form-control" id="do_kraj" placeholder="Dohodni kraj" name="prihod">
+                                                      </div>
+                                               %end
                                         </div>
                                         
     
