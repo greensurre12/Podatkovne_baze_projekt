@@ -6,13 +6,17 @@
                         <div class="col-md-12  text-center"  >
                            <!-- <div data-spy="affix" id="iskalnik" data-offset-top="10" >-->
                             <div class="block wow fadeInUp "  data-wow-delay=".1s">    
-                                            
+                                            %if defined('napaka'):
+                                                   % if napaka:
+                                <p style="color:red">{{napaka}}</p>
+                                    %end
+                                    %end
                                 <h2 class="wow fadeInUp animated "  data-wow-delay=".1s" >
                                     Poišči prevoz!
                                 
                                                      
 								<form class="form-horizontal " action="/search" method="POST">
-                                        
+
                                         <div class="form-group">                                          
 
 
